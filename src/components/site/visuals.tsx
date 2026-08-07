@@ -47,9 +47,11 @@ export function NetworkVisual({ className = "" }: { className?: string }) {
       <circle cx="110" cy="230" r="140" fill={`url(#${id}-c)`} />
 
       <g stroke="var(--sky)" strokeOpacity="0.45" strokeWidth="1">
-        {links.map(([a, b], i) => (
-          <line key={i} x1={nodes[a][0]} y1={nodes[a][1]} x2={nodes[b][0]} y2={nodes[b][1]} />
-        ))}
+        {links.map(([a, b], i) => {
+          const from = nodes[a]!;
+          const to = nodes[b]!;
+          return <line key={i} x1={from[0]} y1={from[1]} x2={to[0]} y2={to[1]} />;
+        })}
       </g>
       <g>
         {nodes.map(([x, y, r], i) => (
