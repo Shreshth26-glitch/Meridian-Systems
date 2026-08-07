@@ -1,6 +1,6 @@
 # Meridian Elevate
 
-Meridian Systems — UI/UX design prompt (Lovable)
+Meridian Systems — UI/UX design prompt
 
 Scope
 
@@ -168,15 +168,6 @@ No color-change hover on hero buttons — transform + ring only, as specified
 
 No generic centered hero — content is left-aligned per the 58–60% / 40–42% split
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a6a6a445-6b36-487b-b01e-aff8461334d9).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
