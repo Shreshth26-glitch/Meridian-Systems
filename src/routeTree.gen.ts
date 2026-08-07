@@ -15,6 +15,8 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as ApiAskAiRouteImport } from './routes/api/ask-ai'
+import { Route as ApiLeadRouteImport } from './routes/api/lead'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
@@ -49,6 +51,16 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAskAiRoute = ApiAskAiRouteImport.update({
+  id: '/api/ask-ai',
+  path: '/api/ask-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeadRoute = ApiLeadRouteImport.update({
+  id: '/api/lead',
+  path: '/api/lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesIndexRoute = ServicesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -72,6 +84,8 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRouteWithChildren
   '/work': typeof WorkRouteWithChildren
+  '/api/ask-ai': typeof ApiAskAiRoute
+  '/api/lead': typeof ApiLeadRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/work/$slug': typeof WorkSlugRoute
   '/services/': typeof ServicesIndexRoute
@@ -82,6 +96,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRoute
   '/work': typeof WorkRouteWithChildren
+  '/api/ask-ai': typeof ApiAskAiRoute
+  '/api/lead': typeof ApiLeadRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/work/$slug': typeof WorkSlugRoute
   '/services': typeof ServicesIndexRoute
@@ -94,6 +110,8 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRouteWithChildren
   '/work': typeof WorkRouteWithChildren
+  '/api/ask-ai': typeof ApiAskAiRoute
+  '/api/lead': typeof ApiLeadRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/work/$slug': typeof WorkSlugRoute
   '/services/': typeof ServicesIndexRoute
@@ -107,6 +125,8 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/work'
+    | '/api/ask-ai'
+    | '/api/lead'
     | '/services/$slug'
     | '/work/$slug'
     | '/services/'
@@ -117,6 +137,8 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/work'
+    | '/api/ask-ai'
+    | '/api/lead'
     | '/services/$slug'
     | '/work/$slug'
     | '/services'
@@ -128,6 +150,8 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/work'
+    | '/api/ask-ai'
+    | '/api/lead'
     | '/services/$slug'
     | '/work/$slug'
     | '/services/'
@@ -140,6 +164,8 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   WorkRoute: typeof WorkRouteWithChildren
+  ApiAskAiRoute: typeof ApiAskAiRoute
+  ApiLeadRoute: typeof ApiLeadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,6 +210,20 @@ declare module '@tanstack/react-router' {
       path: '/work'
       fullPath: '/work'
       preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ask-ai': {
+      id: '/api/ask-ai'
+      path: '/api/ask-ai'
+      fullPath: '/api/ask-ai'
+      preLoaderRoute: typeof ApiAskAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lead': {
+      id: '/api/lead'
+      path: '/api/lead'
+      fullPath: '/api/lead'
+      preLoaderRoute: typeof ApiLeadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/': {
@@ -241,6 +281,8 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRoute,
   ServicesRoute: ServicesRouteWithChildren,
   WorkRoute: WorkRouteWithChildren,
+  ApiAskAiRoute: ApiAskAiRoute,
+  ApiLeadRoute: ApiLeadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

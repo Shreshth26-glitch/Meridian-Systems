@@ -59,7 +59,7 @@ function Company() {
       </div>
 
       {/* Timeline Section */}
-      <section className="mt-20 border-t border-border pt-16">
+      <section className="mt-20 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
           <p className="eyebrow">Milestones</p>
           <h2 className="mt-5">Our evolutionary timeline</h2>
@@ -93,7 +93,7 @@ function Company() {
       </section>
 
       {/* Tech Stack Ecosystem Section */}
-      <section className="mt-24 border-t border-border pt-16">
+      <section className="mt-24 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
           <p className="eyebrow">Ecosystem</p>
           <h2 className="mt-5">Our core technology stack</h2>
@@ -134,7 +134,7 @@ function Company() {
       </section>
 
       {/* Principles Section */}
-      <section className="mt-24 border-t border-border pt-16">
+      <section className="mt-24 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
           <p className="eyebrow">Principles</p>
           <h2 className="mt-5">Engineering philosophy</h2>
@@ -153,7 +153,7 @@ function Company() {
       </section>
 
       {/* Statistics Section */}
-      <dl className="mt-20 grid gap-8 border-t border-border pt-12 sm:grid-cols-4">
+      <dl className="mt-20 grid gap-8 border-t border-border pt-12 sm:grid-cols-4 scroll-reveal">
         {[
           ["2008", "Founded"],
           ["340", "Engineers"],

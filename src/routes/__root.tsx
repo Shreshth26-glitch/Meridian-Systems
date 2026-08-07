@@ -4,10 +4,12 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/header";
@@ -123,17 +125,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+
+  // Run global scroll reveal observer
+  useScrollReveal();
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          {/* Keyed container triggers fade-in animation on every route change */}
+          <div key={location.pathname} className="animate-page-fade">
+            <Outlet />
+          </div>
         </main>
         <Footer />
       </div>
     </QueryClientProvider>
   );
 }
+

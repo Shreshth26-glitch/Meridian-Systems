@@ -1,8 +1,47 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { HeroBackdrop, NetworkVisual } from "./visuals";
 
 export function Hero() {
+  const words = ["excellence", "reliability", "scale", "velocity", "precision"];
+  const [wordIndex, setWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const currentWord = words[wordIndex]!;
+
+    if (!isDeleting) {
+      timer = setTimeout(() => {
+        setCurrentText(currentWord.substring(0, currentText.length + 1));
+        setTypingSpeed(80);
+      }, typingSpeed);
+
+      if (currentText === currentWord) {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+          setTypingSpeed(40);
+        }, 1500);
+      }
+    } else {
+      timer = setTimeout(() => {
+        setCurrentText(currentWord.substring(0, currentText.length - 1));
+        setTypingSpeed(40);
+      }, typingSpeed);
+
+      if (currentText === "") {
+        setIsDeleting(false);
+        setWordIndex((prev) => (prev + 1) % words.length);
+        setTypingSpeed(120);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, wordIndex, typingSpeed]);
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0" aria-hidden="true">
@@ -17,7 +56,9 @@ export function Hero() {
 
             <h1 className="mt-6">
               Enterprise systems engineered for{" "}
-              <span style={{ color: "var(--sky)" }}>excellence</span>
+              <span style={{ color: "var(--sky)" }} className="typewriter-cursor pr-1">
+                {currentText}
+              </span>
             </h1>
 
             <p

@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, Moon, Sparkles, Sun, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
+import { AskAIDrawer } from "./ask-ai-drawer";
 
 const nav = [
   { label: "Services", to: "/services" },
@@ -13,6 +14,7 @@ const nav = [
 export function Header() {
   const { theme, toggle, mounted } = useTheme();
   const [open, setOpen] = useState(false);
+  const [askAIOpen, setAskAIOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -84,10 +86,16 @@ export function Header() {
               {mounted && theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
             </button>
 
-            <button type="button" className="btn-base btn-primary" aria-label="Ask AI">
+            <button
+              type="button"
+              onClick={() => setAskAIOpen(true)}
+              className="btn-base btn-primary"
+              aria-label="Ask AI"
+            >
               <Sparkles size={14} />
               <span className="hidden sm:inline">Ask AI</span>
             </button>
+
 
             <Link to="/contact" className="btn-base btn-secondary hidden lg:inline-flex">
               Book Consultation
@@ -152,6 +160,9 @@ export function Header() {
           </div>
         </div>
       )}
+
+      <AskAIDrawer open={askAIOpen} onClose={() => setAskAIOpen(false)} />
     </header>
   );
 }
+

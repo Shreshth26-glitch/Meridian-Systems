@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Loader2, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Hero } from "@/components/site/hero";
 import { SignatureSolutions } from "@/components/site/signature-solutions";
@@ -108,6 +108,73 @@ function Index() {
   const [hoveredIndustry, setHoveredIndustry] = useState<number | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
+  const [requestForm, setRequestForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    jobTitle: "",
+    phone: "",
+    message: "",
+    marketingOptIn: false,
+    agreeTerms: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  const handleRequestSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!requestForm.agreeTerms) {
+      setFormError("You must agree to the Privacy Statement.");
+      return;
+    }
+    setFormError("");
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: requestForm.firstName,
+          last_name: requestForm.lastName,
+          email: requestForm.email,
+          company: requestForm.company,
+          job_title: requestForm.jobTitle,
+          phone: requestForm.phone,
+          message: requestForm.message,
+          marketing_opt_in: requestForm.marketingOptIn,
+          source: "request_for_services",
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = (await res.json()) as { error?: string };
+        throw new Error(errData.error || "Failed to submit request.");
+      }
+
+      setFormSuccess(true);
+      setRequestForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        company: "",
+        jobTitle: "",
+        phone: "",
+        message: "",
+        marketingOptIn: false,
+        agreeTerms: false,
+      });
+    } catch (err: any) {
+      console.error(err);
+      setFormError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
   // Background gradient offsets for industries
   const glowCoords = [
     { cx1: "20%", cy1: "30%", cx2: "80%", cy2: "70%" },
@@ -128,7 +195,8 @@ function Index() {
       <SignatureSolutions />
 
       {/* Process Section (Roadmap) */}
-      <section className="shell py-24 border-t border-border">
+      <section className="shell py-24 border-t border-border scroll-reveal">
+
         <div className="max-w-2xl">
           <p className="eyebrow">Methodology</p>
           <h2 className="mt-5">Our engineering roadmaps</h2>
@@ -184,7 +252,8 @@ function Index() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="shell py-24 border-t border-border">
+      <section className="shell py-24 border-t border-border scroll-reveal">
+
         <div className="max-w-2xl">
           <p className="eyebrow">Comparison</p>
           <h2 className="mt-5">Why clients choose our engineering process</h2>
@@ -222,7 +291,8 @@ function Index() {
       </section>
 
       {/* Industries Section */}
-      <section className="relative overflow-hidden py-24 border-t border-border">
+      <section className="relative overflow-hidden py-24 border-t border-border scroll-reveal">
+
         {/* Shifting radial glow background illustration */}
         <svg className="absolute inset-0 w-full h-full -z-10 transition-all duration-[600ms] pointer-events-none" aria-hidden="true">
           <defs>
@@ -273,7 +343,8 @@ function Index() {
       </section>
 
       {/* Case Studies Work Grid (Homepage) */}
-      <section className="shell py-24 border-t border-border">
+      <section className="shell py-24 border-t border-border scroll-reveal">
+
         <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] items-center">
           <div>
             <p className="eyebrow">Selected work</p>
@@ -312,7 +383,8 @@ function Index() {
       </section>
 
       {/* Testimonials Magazine Section */}
-      <section className="shell py-24 border-t border-border">
+      <section className="shell py-24 border-t border-border scroll-reveal">
+
         <div className="max-w-3xl mx-auto text-center">
           <p className="eyebrow">Endorsements</p>
           <h2 className="mt-5">What our clients say</h2>
@@ -376,8 +448,211 @@ function Index() {
         </div>
       </section>
 
+      {/* Request for Services Section */}
+      <section className="shell py-24 border-t border-border scroll-reveal">
+        <div className="grid gap-10 lg:grid-cols-[45fr_55fr] items-stretch">
+          {/* Left Column (Abstract vortex image) */}
+          <div className="relative overflow-hidden rounded-xl border border-border bg-black min-h-[460px] flex flex-col justify-end p-8 md:p-12 shadow-inner">
+            <div className="absolute inset-0 bg-cover bg-center opacity-65 mix-blend-screen" style={{ backgroundImage: "url('/vortex_abstract_bg.png')" }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            <div className="relative z-10 max-w-md text-left">
+              <h2 className="text-[32px] md:text-[38px] font-display font-bold leading-tight tracking-tight text-white">
+                Request for services
+              </h2>
+              <p className="mt-4 text-[14.5px] leading-relaxed text-zinc-300">
+                Find out more about how we can help your organization navigate its next. Let us know your areas of interest so that we can serve you better.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column (Form) */}
+          <div className="rounded-xl border border-border bg-surface/50 p-8 md:p-10 flex flex-col justify-between text-left">
+            {formSuccess ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
+                <div className="h-12 w-12 rounded-full border border-sky/35 bg-sky/5 font-display text-sky flex items-center justify-center font-bold text-[18px] mb-4">
+                  ✓
+                </div>
+                <h3 className="text-[18px] font-semibold">Request Submitted</h3>
+                <p className="mt-2 text-[14px]" style={{ color: "var(--text-secondary)" }}>
+                  Thank you for your interest. A principal engineer from our team will contact you shortly.
+                </p>
+                <button type="button" onClick={() => setFormSuccess(false)} className="btn-base btn-secondary mt-6 text-[13px] py-1.5 px-4 cursor-pointer">
+                  Submit another request
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleRequestSubmit} className="space-y-6">
+                <div>
+                  <span className="text-[13px] font-semibold text-navy dark:text-sky uppercase tracking-[0.5px]">
+                    All the fields marked with * are required
+                  </span>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="form-first-name" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      First Name *
+                    </label>
+                    <input
+                      id="form-first-name"
+                      type="text"
+                      required
+                      placeholder="Alex"
+                      value={requestForm.firstName}
+                      onChange={e => setRequestForm({...requestForm, firstName: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="form-last-name" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Last Name *
+                    </label>
+                    <input
+                      id="form-last-name"
+                      type="text"
+                      required
+                      placeholder="Moreau"
+                      value={requestForm.lastName}
+                      onChange={e => setRequestForm({...requestForm, lastName: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="form-email" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Email *
+                    </label>
+                    <input
+                      id="form-email"
+                      type="email"
+                      required
+                      placeholder="alex@company.com"
+                      value={requestForm.email}
+                      onChange={e => setRequestForm({...requestForm, email: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="form-company" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Company *
+                    </label>
+                    <input
+                      id="form-company"
+                      type="text"
+                      required
+                      placeholder="Company Ltd"
+                      value={requestForm.company}
+                      onChange={e => setRequestForm({...requestForm, company: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="form-job" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Job Title *
+                    </label>
+                    <input
+                      id="form-job"
+                      type="text"
+                      required
+                      placeholder="VP Platform Engineering"
+                      value={requestForm.jobTitle}
+                      onChange={e => setRequestForm({...requestForm, jobTitle: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="form-phone" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Phone
+                    </label>
+                    <input
+                      id="form-phone"
+                      type="tel"
+                      placeholder="+46 8 123 45 67"
+                      value={requestForm.phone}
+                      onChange={e => setRequestForm({...requestForm, phone: e.target.value})}
+                      className="h-[40px] w-full rounded-md border border-border bg-background px-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label htmlFor="form-message" className="text-[12px] font-medium text-secondary-foreground block mb-1">
+                      Message
+                    </label>
+                    <textarea
+                      id="form-message"
+                      rows={3}
+                      placeholder="Please details your system constraints or requirements..."
+                      value={requestForm.message}
+                      onChange={e => setRequestForm({...requestForm, message: e.target.value})}
+                      className="w-full rounded-md border border-border bg-background p-3 text-[13.5px] outline-none focus-visible:border-sky"
+                    />
+                  </div>
+
+                  {/* Toggle switches */}
+                  <div className="sm:col-span-2 flex items-start gap-3 mt-2">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={requestForm.marketingOptIn}
+                      onClick={() => setRequestForm({...requestForm, marketingOptIn: !requestForm.marketingOptIn})}
+                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus-visible:ring-2 focus-visible:ring-sky ${requestForm.marketingOptIn ? 'bg-navy dark:bg-sky' : 'bg-border dark:bg-zinc-700'}`}
+                    >
+                      <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${requestForm.marketingOptIn ? 'translate-x-4' : 'translate-x-0'}`} />
+                    </button>
+                    <span className="text-[13px] text-secondary-foreground leading-normal">
+                      Opt in for marketing communication <Link to="/company" className="underline font-semibold hover:text-sky">Privacy Statement</Link>
+                    </span>
+                  </div>
+
+                  <div className="sm:col-span-2 flex items-start gap-3">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={requestForm.agreeTerms}
+                      onClick={() => setRequestForm({...requestForm, agreeTerms: !requestForm.agreeTerms})}
+                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none focus-visible:ring-2 focus-visible:ring-sky ${requestForm.agreeTerms ? 'bg-navy dark:bg-sky' : 'bg-border dark:bg-zinc-700'}`}
+                    >
+                      <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${requestForm.agreeTerms ? 'translate-x-4' : 'translate-x-0'}`} />
+                    </button>
+                    <span className="text-[13px] text-secondary-foreground leading-normal">
+                      I agree to the <Link to="/company" className="underline font-semibold hover:text-sky">Privacy Statement</Link> *
+                    </span>
+                  </div>
+                </div>
+
+                {formError && (
+                  <p className="text-[13px] text-destructive font-semibold">{formError}</p>
+                )}
+
+                <div className="flex justify-start">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-base bg-zinc-950 dark:bg-sky hover:bg-zinc-900 dark:hover:bg-sky/90 text-white dark:text-navy py-2.5 px-6 flex items-center justify-center gap-1.5 transition-all text-[13px] font-semibold mt-2 shadow-md rounded-md cursor-pointer disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        Submit <span className="text-[14px]">↗</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
+
       {/* CTA Section */}
-      <section className="shell pb-12">
+      <section className="shell pb-12 scroll-reveal">
+
         <div className="flex flex-wrap items-center justify-between gap-8 rounded-xl border border-border p-10">
           <div className="max-w-xl">
             <h2>Start with a scoping conversation</h2>

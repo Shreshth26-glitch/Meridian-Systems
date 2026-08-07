@@ -5,7 +5,7 @@ import { CardArt } from "./card-art";
 
 export function SignatureSolutions() {
   return (
-    <section className="shell py-24">
+    <section className="shell py-24 scroll-reveal">
       <div className="max-w-2xl">
         <p className="eyebrow">Signature solutions</p>
         <h2 className="mt-5">Six practices that carry most of the transformation load</h2>
