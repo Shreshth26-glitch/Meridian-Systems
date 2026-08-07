@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CardArt } from "@/components/site/card-art";
 import { caseStudies } from "@/lib/services";
+import { Reveal } from "@/components/ui/reveal";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
@@ -34,34 +35,35 @@ function Work() {
 
       <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {caseStudies.map((study, i) => (
-          <Link
-            key={study.slug}
-            to="/work/$slug"
-            params={{ slug: study.slug }}
-            className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/40 focus-visible:outline-none"
-          >
-            <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
-              <CardArt variant={i + 1} className="h-full w-full" />
-              <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                <CardArt variant={i + 1} intense className="h-full w-full" />
+          <Reveal key={study.slug} delay={i * 80} className="flex h-full w-full">
+            <Link
+              to="/work/$slug"
+              params={{ slug: study.slug }}
+              className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/40 focus-visible:outline-none w-full"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
+                <CardArt variant={i + 1} className="h-full w-full" />
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <CardArt variant={i + 1} intense className="h-full w-full" />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-1 flex-col p-6">
-              <span className="text-[12px] font-semibold uppercase tracking-[1.2px]" style={{ color: "var(--text-muted)" }}>
-                {study.industry}
-              </span>
-              <h2 className="mt-2 text-[18px] font-semibold transition-colors group-hover:text-foreground">
-                {study.client}
-              </h2>
-              <p className="mt-2.5 flex-1 text-[14px]" style={{ color: "var(--text-secondary)" }}>
-                {study.summary}
-              </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sky">
-                View case study
-                <span className="transition-transform group-hover:translate-x-0.5">→</span>
-              </span>
-            </div>
-          </Link>
+              <div className="flex flex-1 flex-col p-6">
+                <span className="text-[12px] font-semibold uppercase tracking-[1.2px]" style={{ color: "var(--text-muted)" }}>
+                  {study.industry}
+                </span>
+                <h2 className="mt-2 text-[18px] font-semibold transition-colors group-hover:text-foreground">
+                  {study.client}
+                </h2>
+                <p className="mt-2.5 flex-1 text-[14px]" style={{ color: "var(--text-secondary)" }}>
+                  {study.summary}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sky">
+                  View case study
+                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                </span>
+              </div>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </div>

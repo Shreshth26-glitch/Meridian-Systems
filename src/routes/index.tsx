@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronLeft, ChevronRight, Loader2, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Reveal } from "@/components/ui/reveal";
+
 import { Hero } from "@/components/site/hero";
 import { SignatureSolutions } from "@/components/site/signature-solutions";
 import { CardArt } from "@/components/site/card-art";
@@ -108,7 +110,43 @@ function Index() {
   const [hoveredIndustry, setHoveredIndustry] = useState<number | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
+  const processSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !processSectionRef.current) return;
+
+    const handleScroll = () => {
+      const element = processSectionRef.current;
+      if (!element) return;
+
+      // Track scroll and highlight current active step on desktop only
+      if (window.innerWidth < 768) return;
+
+      const viewHeight = window.innerHeight;
+      const stepElements = element.querySelectorAll("[data-step-node]");
+      let closestIdx = 0;
+      let minDistance = Infinity;
+
+      stepElements.forEach((el, idx) => {
+        const stepRect = el.getBoundingClientRect();
+        const centerDiff = Math.abs(stepRect.top + stepRect.height / 2 - viewHeight / 2);
+        if (centerDiff < minDistance) {
+          minDistance = centerDiff;
+          closestIdx = idx;
+        }
+      });
+
+      setActiveStep(closestIdx);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const [requestForm, setRequestForm] = useState({
+
     firstName: "",
     lastName: "",
     email: "",
@@ -195,7 +233,8 @@ function Index() {
       <SignatureSolutions />
 
       {/* Process Section (Roadmap) */}
-      <section className="shell py-24 border-t border-border scroll-reveal">
+      <section ref={processSectionRef} className="shell py-24 border-t border-border scroll-reveal">
+
 
         <div className="max-w-2xl">
           <p className="eyebrow">Methodology</p>
@@ -214,8 +253,11 @@ function Index() {
             {processSteps.map((s, idx) => {
               const isActive = activeStep === idx;
               return (
-                <div
+                <Reveal
                   key={s.step}
+                  as="div"
+                  delay={idx * 80}
+                  data-step-node
                   onMouseEnter={() => setActiveStep(idx)}
                   className="flex md:flex-col gap-4 md:gap-0 group cursor-pointer"
                 >
@@ -244,10 +286,11 @@ function Index() {
                       {s.desc}
                     </p>
                   </div>
-                </div>
+                </Reveal>
               );
             })}
           </div>
+
         </div>
       </section>
 
@@ -273,8 +316,10 @@ function Index() {
             </thead>
             <tbody>
               {comparisons.map((c, i) => (
-                <tr
+                <Reveal
                   key={c.point}
+                  as="tr"
+                  delay={i * 80}
                   className="border-b border-border last:border-none transition-colors hover:bg-surface/10 group"
                 >
                   <td className="p-5 font-semibold text-[14.5px] align-top">{c.point}</td>
@@ -283,9 +328,10 @@ function Index() {
                     <span className="text-sky font-semibold block sm:inline-block sm:mr-1 transition-transform group-hover:translate-x-0.5">✔</span>
                     {c.meridian}
                   </td>
-                </tr>
+                </Reveal>
               ))}
             </tbody>
+
           </table>
         </div>
       </section>
@@ -321,24 +367,26 @@ function Index() {
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {industries.map((ind, idx) => (
-              <div
-                key={ind.name}
-                onMouseEnter={() => setHoveredIndustry(idx)}
-                onMouseLeave={() => setHoveredIndustry(null)}
-                className="group p-6 rounded-xl border border-border bg-background/50 hover:bg-background/90 hover:border-sky/30 transition-all duration-300 flex flex-col justify-between min-h-[160px]"
-              >
-                <div>
-                  <h3 className="text-[17px] font-semibold">{ind.name}</h3>
-                  <p className="mt-3 text-[13.5px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                    {ind.desc}
-                  </p>
+              <Reveal key={ind.name} delay={idx * 100} className="w-full">
+                <div
+                  onMouseEnter={() => setHoveredIndustry(idx)}
+                  onMouseLeave={() => setHoveredIndustry(null)}
+                  className="group p-6 rounded-xl border border-border bg-background/50 hover:bg-background/90 hover:border-sky/30 transition-all duration-300 flex flex-col justify-between min-h-[160px] h-full"
+                >
+                  <div>
+                    <h3 className="text-[17px] font-semibold">{ind.name}</h3>
+                    <p className="mt-3 text-[13.5px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                      {ind.desc}
+                    </p>
+                  </div>
+                  <span className="mt-4 text-[12.5px] font-semibold text-sky uppercase tracking-[1.1px] opacity-0 group-hover:opacity-100 transition-opacity">
+                    Learn more →
+                  </span>
                 </div>
-                <span className="mt-4 text-[12.5px] font-semibold text-sky uppercase tracking-[1.1px] opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn more →
-                </span>
-              </div>
+              </Reveal>
             ))}
           </div>
+
         </div>
       </section>
 
@@ -356,29 +404,31 @@ function Index() {
           </div>
           <div className="grid gap-6 sm:grid-cols-3">
             {caseStudies.map((study, i) => (
-              <Link
-                key={study.slug}
-                to="/work/$slug"
-                params={{ slug: study.slug }}
-                className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/35"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <CardArt variant={i + 3} className="h-full w-full" />
-                  <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                    <CardArt variant={i + 3} intense className="h-full w-full" />
+              <Reveal key={study.slug} delay={i * 80} className="flex h-full w-full">
+                <Link
+                  to="/work/$slug"
+                  params={{ slug: study.slug }}
+                  className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/35 w-full h-full"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <CardArt variant={i + 3} className="h-full w-full" />
+                    <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                      <CardArt variant={i + 3} intense className="h-full w-full" />
+                    </div>
                   </div>
-                </div>
-                <div className="border-t border-border p-5 flex flex-col justify-between flex-1">
-                  <div>
-                    <span className="text-[11.5px] font-semibold uppercase tracking-[1px]" style={{ color: "var(--text-muted)" }}>
-                      {study.industry}
-                    </span>
-                    <h3 className="mt-2 text-[15px] font-semibold leading-snug group-hover:text-sky transition-colors">{study.client}</h3>
+                  <div className="border-t border-border p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <span className="text-[11.5px] font-semibold uppercase tracking-[1px]" style={{ color: "var(--text-muted)" }}>
+                        {study.industry}
+                      </span>
+                      <h3 className="mt-2 text-[15px] font-semibold leading-snug group-hover:text-sky transition-colors">{study.client}</h3>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </Reveal>
             ))}
           </div>
+
         </div>
       </section>
 
@@ -391,9 +441,9 @@ function Index() {
         </div>
 
         {/* Carousel Quotes */}
-        <div className="mt-14 max-w-4xl mx-auto relative rounded-xl border border-border p-8 md:p-12 bg-surface/20">
+        <Reveal className="mt-14 max-w-4xl mx-auto relative rounded-xl border border-border p-8 md:p-12 bg-surface/20 w-full block">
           <div className="min-h-[160px]">
-            <p className="text-[20px] md:text-[22px] font-display italic leading-relaxed text-foreground">
+            <p key={activeTestimonial} className="text-[20px] md:text-[22px] font-display italic leading-relaxed text-foreground quote-fade">
               “{testimonials[activeTestimonial]?.quote}”
             </p>
           </div>
@@ -417,7 +467,7 @@ function Index() {
                 type="button"
                 onClick={() => setActiveTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
                 aria-label="Previous quote"
-                className="grid h-9 w-9 place-items-center rounded-full border border-border hover:border-sky/50 transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-border hover:border-sky/50 transition-colors cursor-pointer"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -425,13 +475,14 @@ function Index() {
                 type="button"
                 onClick={() => setActiveTestimonial((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
                 aria-label="Next quote"
-                className="grid h-9 w-9 place-items-center rounded-full border border-border hover:border-sky/50 transition-colors"
+                className="grid h-9 w-9 place-items-center rounded-full border border-border hover:border-sky/50 transition-colors cursor-pointer"
               >
                 <ChevronRight size={16} />
               </button>
             </div>
           </div>
-        </div>
+        </Reveal>
+
 
         {/* Brand/Company Wordmark logos row below */}
         <div className="mt-12 border-t border-border pt-10">

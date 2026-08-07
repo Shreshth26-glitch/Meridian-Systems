@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Reveal } from "@/components/ui/reveal";
+
 
 export const Route = createFileRoute("/company")({
   head: () => ({
@@ -47,6 +49,25 @@ const techStack = [
 function Company() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
+  // Timeline drawing progress observer
+  const [timelineVisible, setTimelineVisible] = useState(false);
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !timelineRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setTimelineVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(timelineRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="shell py-20">
       <div className="max-w-2xl">
@@ -58,6 +79,7 @@ function Company() {
         </p>
       </div>
 
+
       {/* Timeline Section */}
       <section className="mt-20 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
@@ -65,19 +87,23 @@ function Company() {
           <h2 className="mt-5">Our evolutionary timeline</h2>
         </div>
         
-        <div className="relative md:grid md:grid-cols-5 md:gap-8 gap-y-12 flex flex-col mt-16">
-          {/* Horizontal line for desktop */}
-          <div className="absolute top-[14px] left-0 right-0 h-[1.5px] bg-border hidden md:block" />
+        <div ref={timelineRef} className="relative md:grid md:grid-cols-5 md:gap-8 gap-y-12 flex flex-col mt-16">
+          {/* Horizontal line for desktop draws in on reveal */}
+          <div className={`absolute top-[14px] left-0 right-0 h-[1.5px] bg-sky hidden md:block timeline-grow-horizontal ${timelineVisible ? "visible" : ""}`} />
           
-          {milestones.map((m) => (
-            <div key={m.year} className="relative z-10 flex md:flex-col gap-5 md:gap-0">
+          {milestones.map((m, idx) => (
+            <Reveal
+              key={m.year}
+              delay={idx * 100}
+              className="relative z-10 flex md:flex-col gap-5 md:gap-0"
+            >
               {/* Node indicator */}
               <div className="flex flex-col items-center">
                 <div className="h-7 w-7 rounded-full border-2 border-border bg-background flex items-center justify-center shrink-0">
                   <div className="h-3.5 w-3.5 rounded-full bg-sky" />
                 </div>
-                {/* Vertical line for mobile */}
-                <div className="w-[1.5px] bg-border flex-1 md:hidden mt-2 min-h-[50px]" />
+                {/* Vertical line for mobile draws in on reveal */}
+                <div className={`w-[1.5px] bg-sky flex-1 md:hidden mt-2 min-h-[50px] timeline-grow-vertical ${timelineVisible ? "visible" : ""}`} />
               </div>
               
               <div className="md:mt-5">
@@ -87,10 +113,11 @@ function Company() {
                   {m.copy}
                 </p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
+
 
       {/* Tech Stack Ecosystem Section */}
       <section className="mt-24 border-t border-border pt-16 scroll-reveal">
@@ -103,35 +130,37 @@ function Company() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-12">
-          {techStack.map((group) => {
+          {techStack.map((group, idx) => {
             const isDimmed = hoveredCategory !== null && hoveredCategory !== group.category;
             return (
-              <div
-                key={group.category}
-                onMouseEnter={() => setHoveredCategory(group.category)}
-                onMouseLeave={() => setHoveredCategory(null)}
-                className={`rounded-xl border border-border p-6 bg-surface/30 transition-all duration-300 ${
-                  isDimmed ? "opacity-30 scale-[0.98]" : "opacity-100 scale-100 border-sky/20 bg-surface/60"
-                }`}
-              >
-                <h3 className="text-[14px] font-semibold uppercase tracking-[1.2px] text-sky">
-                  {group.category}
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-border bg-background px-3 py-1.5 text-[13px] font-medium text-foreground transition-all duration-300"
-                    >
-                      {item}
-                    </span>
-                  ))}
+              <Reveal key={group.category} delay={idx * 100} className="w-full">
+                <div
+                  onMouseEnter={() => setHoveredCategory(group.category)}
+                  onMouseLeave={() => setHoveredCategory(null)}
+                  className={`rounded-xl border border-border p-6 bg-surface/30 transition-all duration-300 h-full ${
+                    isDimmed ? "opacity-30 scale-[0.98]" : "opacity-100 scale-100 border-sky/20 bg-surface/60"
+                  }`}
+                >
+                  <h3 className="text-[14px] font-semibold uppercase tracking-[1.2px] text-sky">
+                    {group.category}
+                  </h3>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-border bg-background px-3 py-1.5 text-[13px] font-medium text-foreground transition-all duration-300"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>
       </section>
+
 
       {/* Principles Section */}
       <section className="mt-24 border-t border-border pt-16 scroll-reveal">
@@ -141,16 +170,17 @@ function Company() {
         </div>
 
         <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border sm:grid-cols-2 bg-border">
-          {principles.map(([title, body]) => (
-            <div key={title} className="bg-background p-8">
+          {principles.map(([title, body], idx) => (
+            <Reveal key={title} delay={idx * 150} className="bg-background p-8 h-full">
               <h3 className="text-[19px] font-semibold">{title}</h3>
               <p className="mt-3 text-[14.5px]" style={{ color: "var(--text-secondary)" }}>
                 {body}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
+
 
       {/* Statistics Section */}
       <dl className="mt-20 grid gap-8 border-t border-border pt-12 sm:grid-cols-4 scroll-reveal">

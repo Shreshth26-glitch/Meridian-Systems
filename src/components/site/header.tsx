@@ -69,7 +69,7 @@ export function Header() {
                 key={item.to}
                 to={item.to}
                 activeProps={{ className: "text-foreground bg-background" }}
-                className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:text-foreground"
+                className="relative rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:text-foreground after:absolute after:bottom-1 after:left-3.5 after:right-3.5 after:h-[1px] after:bg-sky after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200"
               >
                 {item.label}
               </Link>
@@ -81,19 +81,29 @@ export function Header() {
               type="button"
               onClick={toggle}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-              className="grid h-9 w-9 place-items-center rounded-full border border-border text-secondary-foreground transition-colors hover:text-foreground"
+              className="relative grid h-9 w-9 place-items-center rounded-full border border-border text-secondary-foreground transition-colors hover:text-foreground overflow-hidden"
             >
-              {mounted && theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+              <span className={`absolute transition-all duration-300 ${mounted && theme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-90"}`}>
+                <Sun size={15} />
+              </span>
+              <span className={`absolute transition-all duration-300 ${!mounted || theme === "light" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 -rotate-90"}`}>
+                <Moon size={15} />
+              </span>
             </button>
 
             <button
               type="button"
               onClick={() => setAskAIOpen(true)}
-              className="btn-base btn-primary"
+              className="btn-base btn-primary relative"
               aria-label="Ask AI"
             >
               <Sparkles size={14} />
               <span className="hidden sm:inline">Ask AI</span>
+              {/* Pulsing indicator dot */}
+              <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky"></span>
+              </span>
             </button>
 
 
