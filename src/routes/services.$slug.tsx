@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { CardArt } from "@/components/site/card-art";
-import { caseStudies, getService } from "@/lib/services";
+import { getCaseStudy, getService } from "@/lib/services";
 
 export const Route = createFileRoute("/services/$slug")({
   loader: ({ params }) => {
@@ -31,6 +31,10 @@ function ServiceDetail() {
   const { slug } = Route.useParams();
   const service = getService(slug)!;
   const Icon = service.icon;
+
+  const related = (service.relatedCaseStudies || [])
+    .map((slug) => getCaseStudy(slug))
+    .filter((c): c is NonNullable<typeof c> => !!c);
 
   return (
     <div className="shell py-16">
@@ -106,24 +110,33 @@ function ServiceDetail() {
         </aside>
       </div>
 
-      <section className="mt-24 border-t border-border pt-12">
-        <h2>Related work</h2>
-        <div className="mt-8 grid gap-6 sm:grid-cols-3">
-          {caseStudies.map((study, i) => (
-            <article key={study.slug} className="overflow-hidden rounded-xl border border-border">
-              <div className="aspect-[16/10]">
-                <CardArt variant={i + 1} className="h-full w-full" />
-              </div>
-              <div className="border-t border-border p-5">
-                <p className="text-[12.5px] uppercase tracking-[1.1px]" style={{ color: "var(--text-muted)" }}>
-                  {study.tag}
-                </p>
-                <h3 className="mt-2 text-[16px] font-semibold">{study.title}</h3>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+      {related.length > 0 ? (
+        <section className="mt-24 border-t border-border pt-12">
+          <h2>Related work</h2>
+          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            {related.map((study, i) => (
+              <article key={study.slug} className="overflow-hidden rounded-xl border border-border">
+                <div className="aspect-[16/10]">
+                  <CardArt variant={i + 1} className="h-full w-full" />
+                </div>
+                <div className="border-t border-border p-5">
+                  <p className="text-[12.5px] uppercase tracking-[1.1px]" style={{ color: "var(--text-muted)" }}>
+                    {study.tag}
+                  </p>
+                  <h3 className="mt-2 text-[16px] font-semibold">{study.title}</h3>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section className="mt-24 border-t border-border pt-12">
+          <h2>Related work</h2>
+          <p className="mt-4 text-[15px]" style={{ color: "var(--text-secondary)" }}>
+            Case studies for this service are coming soon.
+          </p>
+        </section>
+      )}
     </div>
   );
 }

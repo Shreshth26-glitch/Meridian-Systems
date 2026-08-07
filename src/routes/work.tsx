@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CardArt } from "@/components/site/card-art";
 import { caseStudies } from "@/lib/services";
 
@@ -22,7 +22,6 @@ export const Route = createFileRoute("/work")({
 });
 
 function Work() {
-  const all = [...caseStudies, ...caseStudies.map((c) => ({ ...c, slug: `${c.slug}-2` }))];
   return (
     <div className="shell py-20">
       <div className="max-w-2xl">
@@ -34,20 +33,38 @@ function Work() {
       </div>
 
       <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {all.map((study, i) => (
-          <article key={study.slug} className="overflow-hidden rounded-xl border border-border">
-            <div className="aspect-[16/10]">
-              <CardArt variant={i} className="h-full w-full" />
+        {caseStudies.map((study, i) => (
+          <Link
+            key={study.slug}
+            to="/work/$slug"
+            params={{ slug: study.slug }}
+            className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/40 focus-visible:outline-none"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
+              <CardArt variant={i + 1} className="h-full w-full" />
+              <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                <CardArt variant={i + 1} intense className="h-full w-full" />
+              </div>
             </div>
-            <div className="border-t border-border p-6">
-              <p className="text-[12.5px] uppercase tracking-[1.1px]" style={{ color: "var(--text-muted)" }}>
-                {study.tag}
+            <div className="flex flex-1 flex-col p-6">
+              <span className="text-[12px] font-semibold uppercase tracking-[1.2px]" style={{ color: "var(--text-muted)" }}>
+                {study.industry}
+              </span>
+              <h2 className="mt-2 text-[18px] font-semibold transition-colors group-hover:text-foreground">
+                {study.client}
+              </h2>
+              <p className="mt-2.5 flex-1 text-[14px]" style={{ color: "var(--text-secondary)" }}>
+                {study.summary}
               </p>
-              <h2 className="mt-2 text-[18px]">{study.title}</h2>
+              <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sky">
+                View case study
+                <span className="transition-transform group-hover:translate-x-0.5">→</span>
+              </span>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>
   );
 }
+

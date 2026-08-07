@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { services } from "@/lib/services";
+import { CardArt } from "@/components/site/card-art";
+import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -20,6 +22,24 @@ export const Route = createFileRoute("/services/")({
   component: ServicesIndex,
 });
 
+const variantMapping: Record<string, number> = {
+  "enterprise-erp": 6,
+  "custom-website-development": 7,
+  "web-applications": 8,
+  "android-app-development": 9,
+  "ios-app-development": 10,
+  "cross-platform-apps": 11,
+  "social-media-marketing": 12,
+  "seo": 13,
+  "database-architecture": 14,
+  "cloud-infrastructure": 0,
+  "api-development": 1,
+  "ai-automation": 2,
+  "ui-ux-design": 3,
+  "cybersecurity-consulting": 4,
+  "it-consulting": 5,
+};
+
 function ServicesIndex() {
   return (
     <div className="shell py-20">
@@ -32,25 +52,35 @@ function ServicesIndex() {
         </p>
       </div>
 
-      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {services.map((service) => (
-          <Link
-            key={service.slug}
-            to="/services/$slug"
-            params={{ slug: service.slug }}
-            className="directory-card group relative overflow-hidden rounded-lg border border-border p-5 outline-none"
-          >
-            <span className="directory-tint" aria-hidden="true" />
-            <span className="directory-corner" aria-hidden="true" />
-            <span className="relative block">
-              <service.icon size={20} className="text-navy" />
-              <span className="mt-4 block text-[15px] font-semibold">{service.name}</span>
-              <span className="directory-desc block text-[13px]" style={{ color: "var(--text-secondary)" }}>
-                {service.tagline}
-              </span>
-            </span>
-          </Link>
-        ))}
+      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => {
+          const artVariant = variantMapping[service.slug] ?? 0;
+          return (
+            <Link
+              key={service.slug}
+              to="/services/$slug"
+              params={{ slug: service.slug }}
+              className="signature-card group relative flex flex-col overflow-hidden rounded-xl border border-border bg-background focus-visible:outline-none"
+            >
+              <div className="relative aspect-[16/11] overflow-hidden border-b border-border">
+                <CardArt variant={artVariant} className="h-full w-full" />
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-[380ms] group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <CardArt variant={artVariant} intense className="h-full w-full" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="text-[18px] font-semibold">{service.name}</h3>
+                <p className="mt-2.5 text-[14px] flex-1" style={{ color: "var(--text-secondary)" }}>
+                  {service.description}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-navy">
+                  <span className="learn-underline">Learn more</span>
+                  <ArrowRight size={13} className="btn-arrow" />
+                </span>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
