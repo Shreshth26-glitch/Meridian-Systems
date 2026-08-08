@@ -30,6 +30,7 @@
   --color-navy: var(--navy);
   --color-navy-foreground: var(--navy-foreground);
   --color-sky: var(--sky);
+  --color-sky-text: var(--sky-text);
   --color-cyan: var(--cyan);
   --color-border: var(--border);
   --color-input: var(--border);
@@ -61,6 +62,7 @@
   --navy: oklch(0.4092 0.1065 250.21);
   --navy-foreground: oklch(1 0 0);
   --sky: oklch(0.7535 0.139 232.66);
+  --sky-text: oklch(0.52 0.16 235);
   --cyan: oklch(0.8043 0.1459 219.52);
   --border: oklch(0.9363 0.0138 247.97);
   --ring-primary: 0 0 0 3px rgba(56, 189, 248, 0.35);
@@ -83,6 +85,7 @@
   --navy: oklch(0.7535 0.139 232.66);
   --navy-foreground: oklch(0.2599 0.0604 251.32);
   --sky: oklch(0.7535 0.139 232.66);
+  --sky-text: var(--sky);
   --cyan: oklch(0.8043 0.1459 219.52);
   --border: oklch(0.3101 0.0804 256.63);
   --ring-primary: 0 0 0 3px rgba(56, 189, 248, 0.35);

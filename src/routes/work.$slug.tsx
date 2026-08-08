@@ -86,7 +86,7 @@ function CaseStudyDetail() {
             <dl className="mt-5 space-y-6">
               <div className="flex gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-background">
-                  <Clock size={16} className="text-sky" />
+                  <Clock size={16} className="text-sky-text" />
                 </div>
                 <div>
                   <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
@@ -98,7 +98,7 @@ function CaseStudyDetail() {
 
               <div className="flex gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-background">
-                  <Code2 size={16} className="text-sky" />
+                  <Code2 size={16} className="text-sky-text" />
                 </div>
                 <div>
                   <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
@@ -110,7 +110,7 @@ function CaseStudyDetail() {
 
               <div className="flex gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-background">
-                  <LineChart size={16} className="text-sky" />
+                  <LineChart size={16} className="text-sky-text" />
                 </div>
                 <div>
                   <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
@@ -122,7 +122,7 @@ function CaseStudyDetail() {
 
               <div className="flex gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-background">
-                  <Award size={16} className="text-sky" />
+                  <Award size={16} className="text-sky-text" />
                 </div>
                 <div>
                   <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>

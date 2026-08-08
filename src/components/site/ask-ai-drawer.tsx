@@ -340,6 +340,8 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
         {/* Scrollable Chat Area */}
         <div
           ref={scrollAreaRef}
+          aria-live="polite"
+          aria-atomic="false"
           className="flex-1 overflow-y-auto px-5 py-6 space-y-6 scrollbar-thin"
         >
           {messages.map((msg) => {
@@ -355,7 +357,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                     }`}
                   >
                     {!isUser && (
-                      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-sky uppercase">
+                      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-sky-text uppercase">
                         <Sparkles size={10} />
                         Meridian AI
                       </div>
@@ -413,6 +415,11 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                             value={leadForm.email}
                             onChange={(e) => handleLeadEmailChange(e.target.value)}
                             onBlur={handleLeadEmailBlur}
+                            aria-describedby={
+                              leadTouched["email"] && leadErrors["email"]
+                                ? "lead-email-error"
+                                : undefined
+                            }
                             className={`mt-1 h-[36px] w-full rounded-md border bg-background px-3 text-[13px] outline-none transition-colors focus-visible:border-sky ${
                               leadTouched["email"] && leadErrors["email"]
                                 ? "border-destructive focus-visible:border-destructive"
@@ -420,7 +427,10 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                             }`}
                           />
                           {leadTouched["email"] && leadErrors["email"] && (
-                            <p className="mt-1 text-[11.5px] text-destructive font-semibold">
+                            <p
+                              id="lead-email-error"
+                              className="mt-1 text-[11.5px] text-destructive font-semibold"
+                            >
                               {leadErrors["email"]}
                             </p>
                           )}
@@ -529,7 +539,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                 <a
                   href="/contact"
                   onClick={onClose}
-                  className="text-sky hover:underline font-semibold"
+                  className="text-sky-text hover:underline font-semibold"
                 >
                   contact form
                 </a>
@@ -546,7 +556,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                 <a
                   href="/contact"
                   onClick={onClose}
-                  className="text-sky hover:underline font-semibold"
+                  className="text-sky-text hover:underline font-semibold"
                 >
                   contact form
                 </a>

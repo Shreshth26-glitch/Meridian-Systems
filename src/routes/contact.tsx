@@ -309,7 +309,7 @@ function Contact() {
 
           {submitSuccess ? (
             <div className="mt-8 py-10 px-5 text-center border border-sky/30 bg-sky/5 rounded-xl animate-fade-in">
-              <span className="text-[13px] font-bold text-sky uppercase tracking-widest block">
+              <span className="text-[13px] font-bold text-sky-text uppercase tracking-widest block">
                 Success
               </span>
               <p className="mt-3 text-[15.5px] font-medium text-foreground">
@@ -329,6 +329,7 @@ function Contact() {
                   value={formData.name}
                   onChange={(e) => handleChange("name", e.target.value)}
                   onBlur={() => handleBlur("name")}
+                  aria-describedby={touched["name"] && errors["name"] ? "name-error" : undefined}
                   className={`mt-2 h-[42px] w-full rounded-md border bg-background px-3 text-[14px] outline-none transition-colors focus-visible:border-sky ${
                     touched["name"] && errors["name"]
                       ? "border-destructive focus-visible:border-destructive"
@@ -336,7 +337,10 @@ function Contact() {
                   }`}
                 />
                 {touched["name"] && errors["name"] && (
-                  <p className="mt-1.5 text-[11.5px] text-destructive font-semibold">
+                  <p
+                    id="name-error"
+                    className="mt-1.5 text-[11.5px] text-destructive font-semibold"
+                  >
                     {errors["name"]}
                   </p>
                 )}
@@ -353,6 +357,7 @@ function Contact() {
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                   onBlur={() => handleBlur("email")}
+                  aria-describedby={touched["email"] && errors["email"] ? "email-error" : undefined}
                   className={`mt-2 h-[42px] w-full rounded-md border bg-background px-3 text-[14px] outline-none transition-colors focus-visible:border-sky ${
                     touched["email"] && errors["email"]
                       ? "border-destructive focus-visible:border-destructive"
@@ -360,7 +365,10 @@ function Contact() {
                   }`}
                 />
                 {touched["email"] && errors["email"] && (
-                  <p className="mt-1.5 text-[11.5px] text-destructive font-semibold">
+                  <p
+                    id="email-error"
+                    className="mt-1.5 text-[11.5px] text-destructive font-semibold"
+                  >
                     {errors["email"]}
                   </p>
                 )}
@@ -408,6 +416,9 @@ function Contact() {
                   value={formData.message}
                   onChange={(e) => handleChange("message", e.target.value)}
                   onBlur={() => handleBlur("message")}
+                  aria-describedby={
+                    touched["message"] && errors["message"] ? "message-error" : undefined
+                  }
                   className={`mt-2 w-full rounded-md border bg-background p-3 text-[14px] outline-none transition-colors focus-visible:border-sky ${
                     touched["message"] && errors["message"]
                       ? "border-destructive focus-visible:border-destructive"
@@ -415,7 +426,10 @@ function Contact() {
                   }`}
                 />
                 {touched["message"] && errors["message"] && (
-                  <p className="mt-1.5 text-[11.5px] text-destructive font-semibold">
+                  <p
+                    id="message-error"
+                    className="mt-1.5 text-[11.5px] text-destructive font-semibold"
+                  >
                     {errors["message"]}
                   </p>
                 )}

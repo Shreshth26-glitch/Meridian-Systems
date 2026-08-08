@@ -93,7 +93,7 @@ export function Footer() {
               Quarterly field notes on enterprise modernisation. No marketing, engineering only.
             </p>
             {status === "success" ? (
-              <div className="mt-5 flex items-center gap-2 text-sky text-[13.5px] font-semibold animate-fade-in">
+              <div className="mt-5 flex items-center gap-2 text-sky-text text-[13.5px] font-semibold animate-fade-in">
                 <Check size={16} />
                 Subscribed
               </div>
@@ -113,6 +113,7 @@ export function Footer() {
                       if (error) setError("");
                     }}
                     disabled={status === "sending"}
+                    aria-describedby={error ? "newsletter-error" : undefined}
                     className={`h-[38px] w-full rounded-md border bg-background px-3 text-[13px] outline-none focus-visible:border-sky transition-colors ${
                       error
                         ? "border-destructive focus-visible:border-destructive"
@@ -137,7 +138,11 @@ export function Footer() {
                     )}
                   </button>
                 </form>
-                {error && <p className="text-[11.5px] text-destructive font-semibold">{error}</p>}
+                {error && (
+                  <p id="newsletter-error" className="text-[11.5px] text-destructive font-semibold">
+                    {error}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -153,7 +158,7 @@ export function Footer() {
                     <li key={`${label}-${i}`}>
                       <Link
                         to={to}
-                        className="text-[14px] transition-colors hover:text-sky"
+                        className="text-[14px] transition-colors hover:text-sky-text"
                         style={{ color: "var(--text-secondary)" }}
                       >
                         {label}
@@ -172,7 +177,7 @@ export function Footer() {
           </p>
           <div className="flex gap-5 text-[13px]">
             {["LinkedIn", "GitHub", "X"].map((s) => (
-              <a key={s} href="#" className="text-sky">
+              <a key={s} href="#" className="text-sky-text">
                 {s}
               </a>
             ))}

@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, Moon, Sparkles, Sun, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useTheme } from "@/hooks/use-theme";
-import { AskAIDrawer } from "./ask-ai-drawer";
+
+const AskAIDrawer = lazy(() => import("./ask-ai-drawer").then((m) => ({ default: m.AskAIDrawer })));
 
 const nav = [
   { label: "Services", to: "/services" },
@@ -69,7 +70,7 @@ export function Header() {
                 key={item.to}
                 to={item.to}
                 activeProps={{ className: "text-foreground bg-background" }}
-                className="relative rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:text-foreground after:absolute after:bottom-1 after:left-3.5 after:right-3.5 after:h-[1px] after:bg-sky after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200"
+                className="relative rounded-full px-3.5 py-1.5 text-[13px] font-medium text-secondary-foreground transition-colors hover:text-foreground after:absolute after:bottom-1 after:left-3.5 after:right-3.5 after:h-[1px] after:bg-sky after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50"
               >
                 {item.label}
               </Link>
@@ -81,7 +82,7 @@ export function Header() {
               type="button"
               onClick={toggle}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-              className="relative grid h-9 w-9 place-items-center rounded-full border border-border text-secondary-foreground transition-colors hover:text-foreground overflow-hidden"
+              className="relative grid h-9 w-9 place-items-center rounded-full border border-border text-secondary-foreground transition-colors hover:text-foreground overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50"
             >
               <span
                 className={`absolute transition-all duration-300 ${mounted && theme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-90"}`}
@@ -120,7 +121,7 @@ export function Header() {
               onClick={() => setOpen(true)}
               aria-label="Open menu"
               aria-expanded={open}
-              className="grid h-9 w-9 place-items-center rounded-full border border-border md:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-border md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50"
             >
               <Menu size={16} />
             </button>
@@ -150,7 +151,7 @@ export function Header() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close menu"
-                className="grid h-10 w-10 place-items-center rounded-full border border-border"
+                className="grid h-10 w-10 place-items-center rounded-full border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50"
               >
                 <X size={16} />
               </button>
@@ -161,7 +162,7 @@ export function Header() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="hairline py-5 font-display text-2xl font-semibold"
+                  className="hairline py-5 font-display text-2xl font-semibold focus-visible:outline-none focus-visible:text-sky"
                 >
                   {item.label}
                 </Link>
@@ -178,7 +179,11 @@ export function Header() {
         </div>
       )}
 
-      <AskAIDrawer open={askAIOpen} onClose={() => setAskAIOpen(false)} />
+      {askAIOpen && (
+        <Suspense fallback={null}>
+          <AskAIDrawer open={askAIOpen} onClose={() => setAskAIOpen(false)} />
+        </Suspense>
+      )}
     </header>
   );
 }

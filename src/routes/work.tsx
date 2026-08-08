@@ -48,7 +48,7 @@ function Work() {
           <button
             key={ind}
             onClick={() => setSelectedIndustry(ind)}
-            className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors border cursor-pointer ${
+            className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors border cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50 ${
               selectedIndustry === ind
                 ? "bg-navy text-navy-foreground border-navy"
                 : "bg-surface/50 text-foreground border-border hover:border-sky/50"
@@ -66,7 +66,7 @@ function Work() {
               <Link
                 to="/work/$slug"
                 params={{ slug: study.slug }}
-                className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/40 focus-visible:outline-none w-full"
+                className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-all hover:border-sky/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky/50 focus-visible:border-sky/50 w-full"
               >
                 <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
                   <CardArt variant={i + 1} className="h-full w-full" />
@@ -90,7 +90,7 @@ function Work() {
                   >
                     {study.summary}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sky">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sky-text">
                     View case study
                     <span className="transition-transform group-hover:translate-x-0.5">→</span>
                   </span>

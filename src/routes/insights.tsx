@@ -75,7 +75,9 @@ function Insights() {
             key={title}
             className="grid gap-4 border-b border-border py-8 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-baseline md:gap-10"
           >
-            <span className="text-[12.5px] uppercase tracking-[1.1px] text-sky md:w-28">{tag}</span>
+            <span className="text-[12.5px] uppercase tracking-[1.1px] text-sky-text md:w-28">
+              {tag}
+            </span>
             <div className="min-w-0">
               <h2 className="text-[20px]">{title}</h2>
               <p className="mt-2 text-[15px]" style={{ color: "var(--text-secondary)" }}>

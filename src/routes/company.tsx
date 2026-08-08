@@ -141,7 +141,9 @@ function Company() {
               </div>
 
               <div className="md:mt-5">
-                <span className="font-display text-[15px] font-semibold text-sky">{m.year}</span>
+                <span className="font-display text-[15px] font-semibold text-sky-text">
+                  {m.year}
+                </span>
                 <h3 className="text-[17px] font-semibold mt-1">{m.title}</h3>
                 <p className="mt-2 text-[14px]" style={{ color: "var(--text-secondary)" }}>
                   {m.copy}
@@ -176,7 +178,7 @@ function Company() {
                       : "opacity-100 scale-100 border-sky/20 bg-surface/60"
                   }`}
                 >
-                  <h3 className="text-[14px] font-semibold uppercase tracking-[1.2px] text-sky">
+                  <h3 className="text-[14px] font-semibold uppercase tracking-[1.2px] text-sky-text">
                     {group.category}
                   </h3>
                   <div className="mt-4 flex flex-wrap gap-2">

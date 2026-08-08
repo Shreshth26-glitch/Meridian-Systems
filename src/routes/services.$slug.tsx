@@ -46,11 +46,11 @@ function ServiceDetail() {
         className="flex items-center gap-2 text-[13px]"
         style={{ color: "var(--text-muted)" }}
       >
-        <Link to="/" className="hover:text-sky">
+        <Link to="/" className="hover:text-sky-text">
           Home
         </Link>
         <ChevronRight size={13} />
-        <Link to="/services" className="hover:text-sky">
+        <Link to="/services" className="hover:text-sky-text">
           Services
         </Link>
         <ChevronRight size={13} />

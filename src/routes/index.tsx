@@ -317,7 +317,9 @@ function Index() {
                   </div>
 
                   <div className="md:mt-5">
-                    <span className="text-[12.5px] font-semibold text-sky uppercase">{s.step}</span>
+                    <span className="text-[12.5px] font-semibold text-sky-text uppercase">
+                      {s.step}
+                    </span>
                     <h3
                       className={`text-[16px] font-semibold mt-1 transition-colors ${isActive ? "text-foreground" : "text-secondary-foreground"}`}
                     >
@@ -377,7 +379,7 @@ function Index() {
                     className="p-5 text-[14px] align-top font-medium"
                     style={{ color: "var(--text-secondary)" }}
                   >
-                    <span className="text-sky font-semibold block sm:inline-block sm:mr-1 transition-transform group-hover:translate-x-0.5">
+                    <span className="text-sky-text font-semibold block sm:inline-block sm:mr-1 transition-transform group-hover:translate-x-0.5">
                       ✔
                     </span>
                     {c.meridian}
@@ -437,7 +439,7 @@ function Index() {
                       {ind.desc}
                     </p>
                   </div>
-                  <span className="mt-4 text-[12.5px] font-semibold text-sky uppercase tracking-[1.1px] opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="mt-4 text-[12.5px] font-semibold text-sky-text uppercase tracking-[1.1px] opacity-0 group-hover:opacity-100 transition-opacity">
                     Learn more →
                   </span>
                 </div>
@@ -480,7 +482,7 @@ function Index() {
                       >
                         {study.industry}
                       </span>
-                      <h3 className="mt-2 text-[15px] font-semibold leading-snug group-hover:text-sky transition-colors">
+                      <h3 className="mt-2 text-[15px] font-semibold leading-snug group-hover:text-sky-text transition-colors">
                         {study.client}
                       </h3>
                     </div>
@@ -513,7 +515,7 @@ function Index() {
           <div className="mt-8 flex items-center justify-between border-t border-border pt-6 flex-wrap gap-4">
             <div className="flex items-center gap-4">
               {/* Illustrated initials avatar instead of photo */}
-              <div className="h-11 w-11 rounded-full border border-sky/35 bg-sky/5 font-display text-sky flex items-center justify-center font-bold text-[14px]">
+              <div className="h-11 w-11 rounded-full border border-sky/35 bg-sky/5 font-display text-sky-text flex items-center justify-center font-bold text-[14px]">
                 {testimonials[activeTestimonial]?.initials}
               </div>
               <div className="text-left">
@@ -606,7 +608,7 @@ function Index() {
           <div className="rounded-xl border border-border bg-surface/50 p-8 md:p-10 flex flex-col justify-between text-left">
             {formSuccess ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-                <div className="h-12 w-12 rounded-full border border-sky/35 bg-sky/5 font-display text-sky flex items-center justify-center font-bold text-[18px] mb-4">
+                <div className="h-12 w-12 rounded-full border border-sky/35 bg-sky/5 font-display text-sky-text flex items-center justify-center font-bold text-[18px] mb-4">
                   ✓
                 </div>
                 <h3 className="text-[18px] font-semibold">Request Submitted</h3>
@@ -763,6 +765,7 @@ function Index() {
                       type="button"
                       role="switch"
                       aria-checked={requestForm.marketingOptIn}
+                      aria-label="Opt in for marketing communication"
                       onClick={() =>
                         setRequestForm({
                           ...requestForm,
@@ -777,7 +780,7 @@ function Index() {
                     </button>
                     <span className="text-[13px] text-secondary-foreground leading-normal">
                       Opt in for marketing communication{" "}
-                      <Link to="/company" className="underline font-semibold hover:text-sky">
+                      <Link to="/company" className="underline font-semibold hover:text-sky-text">
                         Privacy Statement
                       </Link>
                     </span>
@@ -788,6 +791,7 @@ function Index() {
                       type="button"
                       role="switch"
                       aria-checked={requestForm.agreeTerms}
+                      aria-label="I agree to the Privacy Statement"
                       onClick={() =>
                         setRequestForm({ ...requestForm, agreeTerms: !requestForm.agreeTerms })
                       }
@@ -799,7 +803,7 @@ function Index() {
                     </button>
                     <span className="text-[13px] text-secondary-foreground leading-normal">
                       I agree to the{" "}
-                      <Link to="/company" className="underline font-semibold hover:text-sky">
+                      <Link to="/company" className="underline font-semibold hover:text-sky-text">
                         Privacy Statement
                       </Link>{" "}
                       *
