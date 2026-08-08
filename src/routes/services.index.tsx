@@ -30,7 +30,7 @@ const variantMapping: Record<string, number> = {
   "ios-app-development": 10,
   "cross-platform-apps": 11,
   "social-media-marketing": 12,
-  "seo": 13,
+  seo: 13,
   "database-architecture": 14,
   "cloud-infrastructure": 0,
   "api-development": 1,

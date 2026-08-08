@@ -168,7 +168,6 @@ No color-change hover on hero buttons — transform + ring only, as specified
 
 No generic centered hero — content is left-aligned per the 58–60% / 40–42% split
 
-
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).

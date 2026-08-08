@@ -15,7 +15,7 @@ export const up = (pgm) => {
     company: { type: "text" },
     job_title: { type: "text" },
     phone: { type: "text" },
-    marketing_opt_in: { type: "boolean", default: false }
+    marketing_opt_in: { type: "boolean", default: false },
   });
 };
 
@@ -31,7 +31,6 @@ export const down = (pgm) => {
     "company",
     "job_title",
     "phone",
-    "marketing_opt_in"
+    "marketing_opt_in",
   ]);
 };
-

@@ -35,7 +35,10 @@ function CaseStudyDetail() {
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
-          <span className="text-[12px] font-semibold uppercase tracking-[1.2px]" style={{ color: "var(--text-muted)" }}>
+          <span
+            className="text-[12px] font-semibold uppercase tracking-[1.2px]"
+            style={{ color: "var(--text-muted)" }}
+          >
             {study.industry}
           </span>
           <h1 className="mt-4">{study.client}</h1>
@@ -51,13 +54,21 @@ function CaseStudyDetail() {
 
           <div className="mt-12">
             <h2 className="text-[20px] font-semibold">The Approach</h2>
-            <div className="mt-5 space-y-6 text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+            <div
+              className="mt-5 space-y-6 text-[15px] leading-relaxed"
+              style={{ color: "var(--text-secondary)" }}
+            >
               <p>{study.narrative}</p>
               <p>
-                Following our standard delivery cadence, the project was mapped out in eight-week sprints, each tied to clear service-level agreements. We instrumented code paths prior to making any core changes, allowing us to make decisions backed strictly by empirical evidence.
+                Following our standard delivery cadence, the project was mapped out in eight-week
+                sprints, each tied to clear service-level agreements. We instrumented code paths
+                prior to making any core changes, allowing us to make decisions backed strictly by
+                empirical evidence.
               </p>
               <p>
-                At the conclusion of the engagement, our engineers delivered complete operational runbooks and conducted direct hands-on enablement sessions with the client's internal engineering team to ensure complete self-sufficiency.
+                At the conclusion of the engagement, our engineers delivered complete operational
+                runbooks and conducted direct hands-on enablement sessions with the client's
+                internal engineering team to ensure complete self-sufficiency.
               </p>
             </div>
           </div>
@@ -65,17 +76,22 @@ function CaseStudyDetail() {
 
         <aside className="space-y-8">
           <div className="rounded-xl border border-border p-6 bg-surface/50">
-            <h3 className="text-[13px] font-semibold uppercase tracking-[1.2px]" style={{ color: "var(--text-muted)" }}>
+            <h3
+              className="text-[13px] font-semibold uppercase tracking-[1.2px]"
+              style={{ color: "var(--text-muted)" }}
+            >
               Programme Metadata
             </h3>
-            
+
             <dl className="mt-5 space-y-6">
               <div className="flex gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-background">
                   <Clock size={16} className="text-sky" />
                 </div>
                 <div>
-                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>Timeline</dt>
+                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
+                    Timeline
+                  </dt>
                   <dd className="mt-1 text-[15px] font-medium">{study.timeline}</dd>
                 </div>
               </div>
@@ -85,7 +101,9 @@ function CaseStudyDetail() {
                   <Code2 size={16} className="text-sky" />
                 </div>
                 <div>
-                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>Technologies Used</dt>
+                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
+                    Technologies Used
+                  </dt>
                   <dd className="mt-1 text-[15px] font-medium">{study.stack}</dd>
                 </div>
               </div>
@@ -95,7 +113,9 @@ function CaseStudyDetail() {
                   <LineChart size={16} className="text-sky" />
                 </div>
                 <div>
-                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>Business Impact</dt>
+                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
+                    Business Impact
+                  </dt>
                   <dd className="mt-1 text-[15px] font-medium">{study.impact}</dd>
                 </div>
               </div>
@@ -105,7 +125,9 @@ function CaseStudyDetail() {
                   <Award size={16} className="text-sky" />
                 </div>
                 <div>
-                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>ROI Metric</dt>
+                  <dt className="text-[12px]" style={{ color: "var(--text-muted)" }}>
+                    ROI Metric
+                  </dt>
                   <dd className="mt-1 text-[15px] font-semibold text-foreground">{study.roi}</dd>
                 </div>
               </div>
@@ -115,7 +137,8 @@ function CaseStudyDetail() {
           <div className="rounded-xl border border-border p-6">
             <h4 className="text-[15px] font-semibold">Need similar outcomes?</h4>
             <p className="mt-2 text-[14px]" style={{ color: "var(--text-secondary)" }}>
-              Every engagement starts with a ninety-minute scoping call with two principal engineers.
+              Every engagement starts with a ninety-minute scoping call with two principal
+              engineers.
             </p>
             <Link to="/contact" className="btn-base btn-primary w-full mt-5">
               Book a scoping call

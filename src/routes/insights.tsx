@@ -20,12 +20,42 @@ export const Route = createFileRoute("/insights")({
 });
 
 const posts = [
-  ["The migration nobody schedules", "Cloud", "Why cutover windows fail and what to instrument first.", "8 min"],
-  ["Data contracts in practice", "Data", "A working pattern for producer accountability at scale.", "11 min"],
-  ["Evaluating AI before shipping it", "AI", "Evaluation harnesses that catch drift before customers do.", "9 min"],
-  ["Error budgets that survive politics", "Reliability", "Making SLOs stick when release pressure arrives.", "7 min"],
-  ["Retiring the mainframe, quietly", "Legacy", "Strangler migrations without a big-bang weekend.", "13 min"],
-  ["Identity as a migration problem", "Security", "Sequencing IAM consolidation across acquired estates.", "10 min"],
+  [
+    "The migration nobody schedules",
+    "Cloud",
+    "Why cutover windows fail and what to instrument first.",
+    "8 min",
+  ],
+  [
+    "Data contracts in practice",
+    "Data",
+    "A working pattern for producer accountability at scale.",
+    "11 min",
+  ],
+  [
+    "Evaluating AI before shipping it",
+    "AI",
+    "Evaluation harnesses that catch drift before customers do.",
+    "9 min",
+  ],
+  [
+    "Error budgets that survive politics",
+    "Reliability",
+    "Making SLOs stick when release pressure arrives.",
+    "7 min",
+  ],
+  [
+    "Retiring the mainframe, quietly",
+    "Legacy",
+    "Strangler migrations without a big-bang weekend.",
+    "13 min",
+  ],
+  [
+    "Identity as a migration problem",
+    "Security",
+    "Sequencing IAM consolidation across acquired estates.",
+    "10 min",
+  ],
 ];
 
 function Insights() {

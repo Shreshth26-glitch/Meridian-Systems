@@ -12,7 +12,10 @@ export const Route = createFileRoute("/services/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Service not found — Meridian Systems" }, { name: "robots", content: "noindex" }],
+        meta: [
+          { title: "Service not found — Meridian Systems" },
+          { name: "robots", content: "noindex" },
+        ],
       };
     }
     return {
@@ -38,7 +41,11 @@ function ServiceDetail() {
 
   return (
     <div className="shell py-16">
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px]" style={{ color: "var(--text-muted)" }}>
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-2 text-[13px]"
+        style={{ color: "var(--text-muted)" }}
+      >
         <Link to="/" className="hover:text-sky">
           Home
         </Link>
@@ -79,7 +86,10 @@ function ServiceDetail() {
           <ul className="mt-5">
             {service.capabilities.map((c) => (
               <li key={c} className="hairline flex items-start gap-3 py-4 text-[15px]">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--sky)" }} />
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                  style={{ background: "var(--sky)" }}
+                />
                 <span style={{ color: "var(--text-secondary)" }}>{c}</span>
               </li>
             ))}
@@ -120,7 +130,10 @@ function ServiceDetail() {
                   <CardArt variant={i + 1} className="h-full w-full" />
                 </div>
                 <div className="border-t border-border p-5">
-                  <p className="text-[12.5px] uppercase tracking-[1.1px]" style={{ color: "var(--text-muted)" }}>
+                  <p
+                    className="text-[12.5px] uppercase tracking-[1.1px]"
+                    style={{ color: "var(--text-muted)" }}
+                  >
                     {study.tag}
                   </p>
                   <h3 className="mt-2 text-[16px] font-semibold">{study.title}</h3>
@@ -132,9 +145,33 @@ function ServiceDetail() {
       ) : (
         <section className="mt-24 border-t border-border pt-12">
           <h2>Related work</h2>
-          <p className="mt-4 text-[15px]" style={{ color: "var(--text-secondary)" }}>
-            Case studies for this service are coming soon.
-          </p>
+          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            <article className="overflow-hidden rounded-xl border border-border bg-surface/20 flex flex-col">
+              <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-surface/40 flex items-center justify-center">
+                <span className="text-[11px] font-mono tracking-widest uppercase text-muted-foreground border border-border/80 bg-background/40 rounded px-2.5 py-1">
+                  In Queue
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <span
+                  className="text-[12px] font-semibold uppercase tracking-[1.2px]"
+                  style={{ color: "var(--text-muted)" }}
+                >
+                  Case Studies
+                </span>
+                <h3 className="mt-2 text-[15.5px] font-semibold text-foreground">
+                  Case studies coming soon
+                </h3>
+                <p
+                  className="mt-2 text-[13.5px] leading-relaxed"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  We are finalizing audit documentation for this service's engagements. Check back
+                  shortly.
+                </p>
+              </div>
+            </article>
+          </div>
         </section>
       )}
     </div>

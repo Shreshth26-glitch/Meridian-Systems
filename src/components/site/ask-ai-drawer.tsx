@@ -30,7 +30,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  const [apiError, setApiError] = useState<"none" | "rate-limit" | "generic">("none");
 
   // Form State
   const [leadForm, setLeadForm] = useState({
@@ -39,13 +39,35 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
     projectType: "",
     message: "",
   });
+  const [leadErrors, setLeadErrors] = useState<Record<string, string>>({});
+  const [leadTouched, setLeadTouched] = useState<Record<string, boolean>>({});
   const [isSubmittingLead, setIsSubmittingLead] = useState(false);
   const [hasTriggeredForm, setHasTriggeredForm] = useState(false);
 
+  const validateLeadEmail = (val: string) => {
+    if (!val.trim()) return "Email is required.";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(val.trim())) return "Invalid email format.";
+    return "";
+  };
+
+  const handleLeadEmailBlur = () => {
+    setLeadTouched((prev) => ({ ...prev, email: true }));
+    const error = validateLeadEmail(leadForm.email);
+    setLeadErrors((prev) => ({ ...prev, email: error }));
+  };
+
+  const handleLeadEmailChange = (val: string) => {
+    setLeadForm((prev) => ({ ...prev, email: val }));
+    if (leadTouched["email"]) {
+      const error = validateLeadEmail(val);
+      setLeadErrors((prev) => ({ ...prev, email: error }));
+    }
+  };
+
   // Determine current service slug from URL path
   const pathParts = location.pathname.split("/");
-  const currentServiceSlug =
-    pathParts[1] === "services" && pathParts[2] ? pathParts[2] : undefined;
+  const currentServiceSlug = pathParts[1] === "services" && pathParts[2] ? pathParts[2] : undefined;
   const currentService = currentServiceSlug
     ? services.find((s) => s.slug === currentServiceSlug)
     : undefined;
@@ -101,14 +123,37 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
   // Check user input for buying intent
   const detectBuyingIntent = (text: string): boolean => {
     const query = text.toLowerCase();
-    const pricingKeywords = ["price", "pricing", "cost", "how much", "quote", "rates", "budget", "pricing details", "estimate"];
-    const directKeywords = ["talk to", "contact", "hire", "get in touch", "schedule", "book a", "call you", "consultation", "email you"];
+    const pricingKeywords = [
+      "price",
+      "pricing",
+      "cost",
+      "how much",
+      "quote",
+      "rates",
+      "budget",
+      "pricing details",
+      "estimate",
+    ];
+    const directKeywords = [
+      "talk to",
+      "contact",
+      "hire",
+      "get in touch",
+      "schedule",
+      "book a",
+      "call you",
+      "consultation",
+      "email you",
+    ];
 
     if (pricingKeywords.some((kw) => query.includes(kw))) return true;
     if (directKeywords.some((kw) => query.includes(kw))) return true;
 
     // Specific timeline query
-    if (query.includes("timeline") && (query.includes("my") || query.includes("our") || query.includes("specific"))) {
+    if (
+      query.includes("timeline") &&
+      (query.includes("my") || query.includes("our") || query.includes("specific"))
+    ) {
       return true;
     }
 
@@ -119,7 +164,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
   const handleSend = async (text: string) => {
     if (!text.trim() || isLoading) return;
 
-    setApiError(false);
+    setApiError("none");
     const userMessageId = `msg-${Date.now()}`;
     const newMessages = [
       ...messages,
@@ -150,6 +195,12 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
           slug: currentServiceSlug,
         }),
       });
+
+      if (res.status === 429) {
+        setApiError("rate-limit");
+        setIsLoading(false);
+        return;
+      }
 
       if (!res.ok) {
         throw new Error("API failed");
@@ -194,7 +245,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
       }
     } catch (err) {
       console.error(err);
-      setApiError(true);
+      setApiError("generic");
     } finally {
       setIsLoading(false);
     }
@@ -203,7 +254,12 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
   // Submit Lead Capture Form
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!leadForm.email) return;
+    setLeadTouched((prev) => ({ ...prev, email: true }));
+    const error = validateLeadEmail(leadForm.email);
+    if (error) {
+      setLeadErrors((prev) => ({ ...prev, email: error }));
+      return;
+    }
 
     setIsSubmittingLead(true);
     try {
@@ -225,9 +281,7 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
 
       // Mark form as submitted
       setMessages((prev) =>
-        prev.map((msg) =>
-          msg.type === "lead-form" ? { ...msg, submitted: true } : msg
-        )
+        prev.map((msg) => (msg.type === "lead-form" ? { ...msg, submitted: true } : msg)),
       );
 
       // Assistant acknowledges form submission
@@ -249,7 +303,12 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label="Ask AI Panel">
+    <div
+      className="fixed inset-0 z-50 flex justify-end"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Ask AI Panel"
+    >
       {/* Overlay backdrop */}
       <div
         onClick={onClose}
@@ -265,7 +324,9 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-2">
             <Sparkles size={16} className="text-sky" />
-            <span className="font-display font-semibold text-foreground text-[15px]">Ask AI Assistant</span>
+            <span className="font-display font-semibold text-foreground text-[15px]">
+              Ask AI Assistant
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -277,7 +338,10 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
         </div>
 
         {/* Scrollable Chat Area */}
-        <div ref={scrollAreaRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-6 scrollbar-thin">
+        <div
+          ref={scrollAreaRef}
+          className="flex-1 overflow-y-auto px-5 py-6 space-y-6 scrollbar-thin"
+        >
           {messages.map((msg) => {
             if (msg.type === "text") {
               const isUser = msg.role === "user";
@@ -317,15 +381,17 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                         Details submitted successfully!
                       </div>
                     ) : (
-                      <form onSubmit={handleLeadSubmit} className="space-y-4">
+                      <form onSubmit={handleLeadSubmit} className="space-y-4" noValidate>
                         <div>
-                          <label htmlFor="lead-name" className="text-[11.5px] font-medium text-secondary-foreground">
+                          <label
+                            htmlFor="lead-name"
+                            className="text-[11.5px] font-medium text-secondary-foreground"
+                          >
                             Full name
                           </label>
                           <input
                             id="lead-name"
                             type="text"
-                            required
                             placeholder="Alex Moreau"
                             value={leadForm.name}
                             onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
@@ -334,28 +400,45 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                         </div>
 
                         <div>
-                          <label htmlFor="lead-email" className="text-[11.5px] font-medium text-secondary-foreground">
+                          <label
+                            htmlFor="lead-email"
+                            className="text-[11.5px] font-medium text-secondary-foreground"
+                          >
                             Work email *
                           </label>
                           <input
                             id="lead-email"
                             type="email"
-                            required
                             placeholder="alex@company.com"
                             value={leadForm.email}
-                            onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                            className="mt-1 h-[36px] w-full rounded-md border border-border bg-background px-3 text-[13px] outline-none focus-visible:border-sky"
+                            onChange={(e) => handleLeadEmailChange(e.target.value)}
+                            onBlur={handleLeadEmailBlur}
+                            className={`mt-1 h-[36px] w-full rounded-md border bg-background px-3 text-[13px] outline-none transition-colors focus-visible:border-sky ${
+                              leadTouched["email"] && leadErrors["email"]
+                                ? "border-destructive focus-visible:border-destructive"
+                                : "border-border"
+                            }`}
                           />
+                          {leadTouched["email"] && leadErrors["email"] && (
+                            <p className="mt-1 text-[11.5px] text-destructive font-semibold">
+                              {leadErrors["email"]}
+                            </p>
+                          )}
                         </div>
 
                         <div>
-                          <label htmlFor="lead-project" className="text-[11.5px] font-medium text-secondary-foreground">
+                          <label
+                            htmlFor="lead-project"
+                            className="text-[11.5px] font-medium text-secondary-foreground"
+                          >
                             Project Type
                           </label>
                           <select
                             id="lead-project"
                             value={leadForm.projectType}
-                            onChange={(e) => setLeadForm({ ...leadForm, projectType: e.target.value })}
+                            onChange={(e) =>
+                              setLeadForm({ ...leadForm, projectType: e.target.value })
+                            }
                             className="mt-1 h-[36px] w-full rounded-md border border-border bg-background px-3 text-[13px] outline-none focus-visible:border-sky text-foreground"
                           >
                             <option value="cloud">Cloud Infrastructure</option>
@@ -370,7 +453,10 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                         </div>
 
                         <div>
-                          <label htmlFor="lead-message" className="text-[11.5px] font-medium text-secondary-foreground">
+                          <label
+                            htmlFor="lead-message"
+                            className="text-[11.5px] font-medium text-secondary-foreground"
+                          >
                             How can we help?
                           </label>
                           <textarea
@@ -386,10 +472,13 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
                         <button
                           type="submit"
                           disabled={isSubmittingLead}
-                          className="btn-base btn-primary with-arrow w-full py-2 text-[12px] flex items-center justify-center gap-1.5"
+                          className="btn-base btn-primary with-arrow w-full py-2 text-[12px] flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                         >
                           {isSubmittingLead ? (
-                            <Loader2 size={13} className="animate-spin" />
+                            <>
+                              <Loader2 size={13} className="animate-spin" />
+                              Sending…
+                            </>
                           ) : (
                             <>
                               Submit Details
@@ -409,16 +498,48 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
           {/* Loading Indicator */}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="rounded-lg border border-border/60 bg-surface/20 p-4 text-[13px] flex items-center gap-2 text-secondary-foreground">
-                <Loader2 size={14} className="animate-spin text-sky" />
-                <span>Formulating grounded response...</span>
+              <div className="rounded-lg border border-border/80 bg-surface/30 px-4 py-3 flex items-center gap-1.5 text-secondary-foreground">
+                <div className="flex items-center gap-1">
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-sky animate-bounce"
+                    style={{ animationDelay: "0ms", animationDuration: "0.8s" }}
+                  />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-sky animate-bounce"
+                    style={{ animationDelay: "150ms", animationDuration: "0.8s" }}
+                  />
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-sky animate-bounce"
+                    style={{ animationDelay: "300ms", animationDuration: "0.8s" }}
+                  />
+                </div>
+                <span className="text-[11.5px] font-medium tracking-wide uppercase text-muted-foreground ml-1.5">
+                  AI is thinking
+                </span>
               </div>
             </div>
           )}
 
           {/* Error Message Fallback */}
-          {apiError && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-[13px] text-foreground">
+          {apiError === "rate-limit" && (
+            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-[13px] text-foreground animate-fade-in">
+              <p className="font-semibold text-destructive">Rate limit reached</p>
+              <p className="mt-1 text-secondary-foreground text-[12.5px]">
+                You've reached the limit for now — try again in a few minutes, or use the{" "}
+                <a
+                  href="/contact"
+                  onClick={onClose}
+                  className="text-sky hover:underline font-semibold"
+                >
+                  contact form
+                </a>
+                .
+              </p>
+            </div>
+          )}
+
+          {apiError === "generic" && (
+            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-[13px] text-foreground animate-fade-in">
               <p className="font-semibold text-destructive">Connection error</p>
               <p className="mt-1 text-secondary-foreground text-[12.5px]">
                 Having trouble answering right now — try the{" "}
@@ -438,7 +559,9 @@ export function AskAIDrawer({ open, onClose }: AskAIDrawerProps) {
         {/* Suggested Prompt Chips */}
         {messages.length === 1 && !isLoading && (
           <div className="px-5 pb-3">
-            <p className="text-[11.5px] font-semibold text-secondary-foreground mb-2">Suggested questions:</p>
+            <p className="text-[11.5px] font-semibold text-secondary-foreground mb-2">
+              Suggested questions:
+            </p>
             <div className="flex flex-wrap gap-2">
               {getSuggestedPrompts().map((prompt, idx) => (
                 <button

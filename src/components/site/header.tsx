@@ -83,10 +83,14 @@ export function Header() {
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
               className="relative grid h-9 w-9 place-items-center rounded-full border border-border text-secondary-foreground transition-colors hover:text-foreground overflow-hidden"
             >
-              <span className={`absolute transition-all duration-300 ${mounted && theme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-90"}`}>
+              <span
+                className={`absolute transition-all duration-300 ${mounted && theme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 rotate-90"}`}
+              >
                 <Sun size={15} />
               </span>
-              <span className={`absolute transition-all duration-300 ${!mounted || theme === "light" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 -rotate-90"}`}>
+              <span
+                className={`absolute transition-all duration-300 ${!mounted || theme === "light" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-50 -rotate-90"}`}
+              >
                 <Moon size={15} />
               </span>
             </button>
@@ -105,7 +109,6 @@ export function Header() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-sky"></span>
               </span>
             </button>
-
 
             <Link to="/contact" className="btn-base btn-secondary hidden lg:inline-flex">
               Book Consultation
@@ -164,7 +167,11 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-            <Link to="/contact" onClick={() => setOpen(false)} className="btn-base btn-primary mt-8 w-full">
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-base btn-primary mt-8 w-full"
+            >
               Book Consultation
             </Link>
           </div>
@@ -175,4 +182,3 @@ export function Header() {
     </header>
   );
 }
-

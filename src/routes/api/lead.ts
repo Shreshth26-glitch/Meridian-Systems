@@ -74,13 +74,16 @@ export const Route = createFileRoute("/api/lead")({
               job_title || null,
               phone || null,
               marketing_opt_in,
-            ]
+            ],
           );
 
-          return new Response(JSON.stringify({ success: true, message: "Lead captured successfully." }), {
-            headers: { "Content-Type": "application/json" },
-          });
-        } catch (error: any) {
+          return new Response(
+            JSON.stringify({ success: true, message: "Lead captured successfully." }),
+            {
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+        } catch (error) {
           console.error("Lead API Route Error:", error);
           return new Response(JSON.stringify({ error: "Internal server error." }), {
             status: 500,

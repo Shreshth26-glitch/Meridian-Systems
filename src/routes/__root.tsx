@@ -17,21 +17,25 @@ import { Footer } from "@/components/site/footer";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+    <div className="shell flex flex-col items-center justify-center text-center py-24 md:py-36">
+      <p className="eyebrow">Error 404</p>
+      <h1 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] font-semibold tracking-tight">
+        Unresolved Route
+      </h1>
+      <p
+        className="mt-6 max-w-md text-[16px] leading-relaxed"
+        style={{ color: "var(--text-secondary)" }}
+      >
+        The requested system endpoint could not be resolved. This directory path does not exist or
+        has been decommissioned.
+      </p>
+      <div className="mt-10 flex flex-wrap justify-center gap-4">
+        <Link to="/" className="btn-base btn-primary">
+          Return to home
+        </Link>
+        <Link to="/services" className="btn-base btn-secondary">
+          Browse services
+        </Link>
       </div>
     </div>
   );
@@ -145,4 +149,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

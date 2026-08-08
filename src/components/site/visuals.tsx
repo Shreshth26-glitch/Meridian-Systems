@@ -32,7 +32,12 @@ export function NetworkVisual({ className = "" }: { className?: string }) {
   ];
 
   return (
-    <svg viewBox="0 0 440 300" aria-hidden="true" className={className} style={{ width: "100%", height: "auto" }}>
+    <svg
+      viewBox="0 0 440 300"
+      aria-hidden="true"
+      className={className}
+      style={{ width: "100%", height: "auto" }}
+    >
       <defs>
         <radialGradient id={`${id}-g`} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.5" />

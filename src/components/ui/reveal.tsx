@@ -37,7 +37,7 @@ export function Reveal({
       {
         threshold: 0.05,
         rootMargin: "0px 0px -20px 0px", // trigger reveal slightly before item fully enters viewport
-      }
+      },
     );
 
     observer.observe(ref.current);
@@ -47,7 +47,8 @@ export function Reveal({
     };
   }, []);
 
-  const combinedClassName = `reveal-element ${isVisible ? "reveal-active" : ""} ${className}`.trim();
+  const combinedClassName =
+    `reveal-element ${isVisible ? "reveal-active" : ""} ${className}`.trim();
 
   // Inject transition delay if staggering is specified
   const combinedStyle = {
@@ -56,12 +57,7 @@ export function Reveal({
   };
 
   return (
-    <Component
-      ref={ref}
-      className={combinedClassName}
-      style={combinedStyle}
-      {...props}
-    >
+    <Component ref={ref} className={combinedClassName} style={combinedStyle} {...props}>
       {children}
     </Component>
   );

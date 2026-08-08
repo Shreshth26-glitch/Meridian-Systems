@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/ui/reveal";
 
-
 export const Route = createFileRoute("/company")({
   head: () => ({
     meta: [
@@ -23,17 +22,46 @@ export const Route = createFileRoute("/company")({
 });
 
 const milestones = [
-  { year: "2008", title: "Founding", copy: "Stockholm founding. Focused on core cloud infrastructure and reliability." },
-  { year: "2012", title: "Settlement Latency", copy: "Pioneered strangler-pattern migrations for Nordic clearing estates." },
-  { year: "2017", title: "Enterprise Growth", copy: "London & NY offices opened. Scaled to serve tier-1 global institutions." },
-  { year: "2022", title: "AI Practice", copy: "Established evaluation-first applied AI systems engineering practice." },
-  { year: "Present", title: "Unified Modernization", copy: "Serving 9 countries with 340 practitioners modernizing core software." }
+  {
+    year: "2008",
+    title: "Founding",
+    copy: "Stockholm founding. Focused on core cloud infrastructure and reliability.",
+  },
+  {
+    year: "2012",
+    title: "Settlement Latency",
+    copy: "Pioneered strangler-pattern migrations for Nordic clearing estates.",
+  },
+  {
+    year: "2017",
+    title: "Enterprise Growth",
+    copy: "London & NY offices opened. Scaled to serve tier-1 global institutions.",
+  },
+  {
+    year: "2022",
+    title: "AI Practice",
+    copy: "Established evaluation-first applied AI systems engineering practice.",
+  },
+  {
+    year: "Present",
+    title: "Unified Modernization",
+    copy: "Serving 9 countries with 340 practitioners modernizing core software.",
+  },
 ];
 
 const principles = [
-  ["Engineers decide", "Every engagement is led by a practising principal engineer, not an account manager."],
-  ["Evidence over opinion", "We instrument before we recommend. Assessments arrive with measurements attached."],
-  ["Leave it owned", "Runbooks, enablement and handover are scoped from week one, not bolted on at the end."],
+  [
+    "Engineers decide",
+    "Every engagement is led by a practising principal engineer, not an account manager.",
+  ],
+  [
+    "Evidence over opinion",
+    "We instrument before we recommend. Assessments arrive with measurements attached.",
+  ],
+  [
+    "Leave it owned",
+    "Runbooks, enablement and handover are scoped from week one, not bolted on at the end.",
+  ],
   ["Small senior teams", "Median team size is eight. We do not staff pyramids."],
 ];
 
@@ -43,7 +71,7 @@ const techStack = [
   { category: "Cloud", items: ["AWS", "Azure", "GCP", "Cloudflare"] },
   { category: "AI", items: ["PyTorch", "vLLM", "LangGraph", "OpenAI"] },
   { category: "DevOps", items: ["Docker", "Kubernetes", "Terraform", "ArgoCD"] },
-  { category: "Database", items: ["Postgres", "Snowflake", "Kafka", "Redis"] }
+  { category: "Database", items: ["Postgres", "Snowflake", "Kafka", "Redis"] },
 ];
 
 function Company() {
@@ -62,7 +90,7 @@ function Company() {
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     observer.observe(timelineRef.current);
     return () => observer.disconnect();
@@ -79,18 +107,22 @@ function Company() {
         </p>
       </div>
 
-
       {/* Timeline Section */}
       <section className="mt-20 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
           <p className="eyebrow">Milestones</p>
           <h2 className="mt-5">Our evolutionary timeline</h2>
         </div>
-        
-        <div ref={timelineRef} className="relative md:grid md:grid-cols-5 md:gap-8 gap-y-12 flex flex-col mt-16">
+
+        <div
+          ref={timelineRef}
+          className="relative md:grid md:grid-cols-5 md:gap-8 gap-y-12 flex flex-col mt-16"
+        >
           {/* Horizontal line for desktop draws in on reveal */}
-          <div className={`absolute top-[14px] left-0 right-0 h-[1.5px] bg-sky hidden md:block timeline-grow-horizontal ${timelineVisible ? "visible" : ""}`} />
-          
+          <div
+            className={`absolute top-[14px] left-0 right-0 h-[1.5px] bg-sky hidden md:block timeline-grow-horizontal ${timelineVisible ? "visible" : ""}`}
+          />
+
           {milestones.map((m, idx) => (
             <Reveal
               key={m.year}
@@ -103,9 +135,11 @@ function Company() {
                   <div className="h-3.5 w-3.5 rounded-full bg-sky" />
                 </div>
                 {/* Vertical line for mobile draws in on reveal */}
-                <div className={`w-[1.5px] bg-sky flex-1 md:hidden mt-2 min-h-[50px] timeline-grow-vertical ${timelineVisible ? "visible" : ""}`} />
+                <div
+                  className={`w-[1.5px] bg-sky flex-1 md:hidden mt-2 min-h-[50px] timeline-grow-vertical ${timelineVisible ? "visible" : ""}`}
+                />
               </div>
-              
+
               <div className="md:mt-5">
                 <span className="font-display text-[15px] font-semibold text-sky">{m.year}</span>
                 <h3 className="text-[17px] font-semibold mt-1">{m.title}</h3>
@@ -117,7 +151,6 @@ function Company() {
           ))}
         </div>
       </section>
-
 
       {/* Tech Stack Ecosystem Section */}
       <section className="mt-24 border-t border-border pt-16 scroll-reveal">
@@ -138,7 +171,9 @@ function Company() {
                   onMouseEnter={() => setHoveredCategory(group.category)}
                   onMouseLeave={() => setHoveredCategory(null)}
                   className={`rounded-xl border border-border p-6 bg-surface/30 transition-all duration-300 h-full ${
-                    isDimmed ? "opacity-30 scale-[0.98]" : "opacity-100 scale-100 border-sky/20 bg-surface/60"
+                    isDimmed
+                      ? "opacity-30 scale-[0.98]"
+                      : "opacity-100 scale-100 border-sky/20 bg-surface/60"
                   }`}
                 >
                   <h3 className="text-[14px] font-semibold uppercase tracking-[1.2px] text-sky">
@@ -161,7 +196,6 @@ function Company() {
         </div>
       </section>
 
-
       {/* Principles Section */}
       <section className="mt-24 border-t border-border pt-16 scroll-reveal">
         <div className="max-w-2xl">
@@ -180,7 +214,6 @@ function Company() {
           ))}
         </div>
       </section>
-
 
       {/* Statistics Section */}
       <dl className="mt-20 grid gap-8 border-t border-border pt-12 sm:grid-cols-4 scroll-reveal">

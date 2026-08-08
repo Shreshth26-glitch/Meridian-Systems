@@ -32,4 +32,3 @@ export const down = (pgm) => {
     DROP TABLE leads;
   `);
 };
-

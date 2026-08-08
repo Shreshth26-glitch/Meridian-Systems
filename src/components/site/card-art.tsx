@@ -71,7 +71,13 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
               <line key={i} x1="0" y1={20 + i * 38} x2="400" y2={20 + i * 38} />
             ))}
           </g>
-          <path d="M0 200 C 110 120, 200 240, 400 110" fill="none" stroke="#38BDF8" strokeOpacity={0.6 * o} strokeWidth="1.6" />
+          <path
+            d="M0 200 C 110 120, 200 240, 400 110"
+            fill="none"
+            stroke="#38BDF8"
+            strokeOpacity={0.6 * o}
+            strokeWidth="1.6"
+          />
         </g>
       )}
 
@@ -134,7 +140,7 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
           <circle cx="100" cy="170" r="110" fill={`url(#${id}-b)`} />
           <g fill="none" stroke="#38BDF8" strokeOpacity={0.35 * o} strokeWidth="1">
             {[20, 50, 80, 110, 140].map((w) => (
-              <rect key={w} x={200 - w/2} y={130 - w/2} width={w} height={w} rx="6" />
+              <rect key={w} x={200 - w / 2} y={130 - w / 2} width={w} height={w} rx="6" />
             ))}
           </g>
         </g>
@@ -166,8 +172,20 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
         <g>
           <circle cx="330" cy="200" r="160" fill={`url(#${id}-a)`} />
           <circle cx="80" cy="60" r="120" fill={`url(#${id}-b)`} />
-          <path d="M 0 130 Q 100 80 200 130 T 400 130" fill="none" stroke="#38BDF8" strokeOpacity={0.5 * o} strokeWidth="1.5" />
-          <path d="M 0 150 Q 100 100 200 150 T 400 150" fill="none" stroke="#38BDF8" strokeOpacity={0.35 * o} strokeWidth="1.2" />
+          <path
+            d="M 0 130 Q 100 80 200 130 T 400 130"
+            fill="none"
+            stroke="#38BDF8"
+            strokeOpacity={0.5 * o}
+            strokeWidth="1.5"
+          />
+          <path
+            d="M 0 150 Q 100 100 200 150 T 400 150"
+            fill="none"
+            stroke="#38BDF8"
+            strokeOpacity={0.35 * o}
+            strokeWidth="1.2"
+          />
         </g>
       )}
 
@@ -179,7 +197,15 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
             <line x1="120" y1="170" x2="280" y2="90" />
             <line x1="200" y1="50" x2="200" y2="210" />
           </g>
-          <circle cx="200" cy="130" r="25" fill="none" stroke="#38BDF8" strokeOpacity={0.6 * o} strokeWidth="1" />
+          <circle
+            cx="200"
+            cy="130"
+            r="25"
+            fill="none"
+            stroke="#38BDF8"
+            strokeOpacity={0.6 * o}
+            strokeWidth="1"
+          />
         </g>
       )}
 
@@ -202,7 +228,13 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
         <g>
           <circle cx="350" cy="60" r="150" fill={`url(#${id}-a)`} />
           <circle cx="90" cy="200" r="130" fill={`url(#${id}-b)`} />
-          <g fill="none" stroke="#38BDF8" strokeOpacity={0.4 * o} strokeWidth="1" strokeDasharray="3 3">
+          <g
+            fill="none"
+            stroke="#38BDF8"
+            strokeOpacity={0.4 * o}
+            strokeWidth="1"
+            strokeDasharray="3 3"
+          >
             {[40, 85, 130].map((r) => (
               <circle key={r} cx="200" cy="130" r={r} />
             ))}
@@ -217,7 +249,15 @@ export function CardArt({ variant, className = "", intense = false }: Props) {
             <line x1="200" y1="90" x2="200" y2="170" />
             <line x1="160" y1="130" x2="240" y2="130" />
           </g>
-          <circle cx="200" cy="130" r="12" fill="none" stroke="#0F4C81" strokeOpacity="0.25" strokeWidth="0.8" />
+          <circle
+            cx="200"
+            cy="130"
+            r="12"
+            fill="none"
+            stroke="#0F4C81"
+            strokeOpacity="0.25"
+            strokeWidth="0.8"
+          />
         </g>
       )}
     </svg>
