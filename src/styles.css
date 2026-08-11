@@ -74,6 +74,11 @@
     rgba(255, 255, 255, 0.86) 46%,
     rgba(255, 255, 255, 0.22) 100%
   );
+  --video-overlay: radial-gradient(
+    circle at 28% 45%,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.1)
+  );
 }
 
 [data-theme="dark"] {
@@ -96,6 +101,11 @@
     rgba(7, 28, 60, 0.97) 0%,
     rgba(7, 28, 60, 0.88) 46%,
     rgba(7, 28, 60, 0.3) 100%
+  );
+  --video-overlay: radial-gradient(
+    circle at 28% 45%,
+    rgba(7, 28, 60, 0.85),
+    rgba(7, 28, 60, 0.1)
   );
 }
 
@@ -449,5 +459,21 @@
     justify-content: center;
     gap: 1.5rem;
   }
+}
+
+/* ---------- Background Video Styling ---------- */
+
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.95;
+}
+
+[data-theme="dark"] .hero-bg-video {
+  opacity: 0.75;
 }
 

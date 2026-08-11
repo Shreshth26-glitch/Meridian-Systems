@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { HeroBackdrop, NetworkVisual } from "./visuals";
+import { HeroBackdrop } from "./visuals";
 
 export function Hero() {
   const words = ["excellence", "reliability", "scale", "velocity", "precision"];
@@ -9,6 +9,19 @@ export function Hero() {
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(100);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+    const listener = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches);
+    };
+    mediaQuery.addEventListener("change", listener);
+    return () => {
+      mediaQuery.removeEventListener("change", listener);
+    };
+  }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -44,9 +57,24 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0" aria-hidden="true">
-        <HeroBackdrop className="absolute inset-0 h-full w-full" />
-        <div className="absolute inset-0" style={{ backgroundImage: "var(--overlay-wash)" }} />
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+        {prefersReducedMotion ? (
+          <HeroBackdrop className="absolute inset-0 h-full w-full" />
+        ) : (
+          <video
+            className="hero-bg-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/hero-background-technical.svg"
+            aria-hidden="true"
+            preload="metadata"
+          >
+            <source src="/videos/hero-background.mp4" type="video/mp4" />
+          </video>
+        )}
+        <div className="absolute inset-0" style={{ background: "var(--video-overlay)" }} />
       </div>
 
       <div className="shell relative">
@@ -97,7 +125,7 @@ export function Hero() {
           </div>
 
           <div className="relative">
-            <NetworkVisual className="w-full" />
+            {/* Background video is fully visible in this column */}
           </div>
         </div>
       </div>
