@@ -419,3 +419,35 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- Marquee Animation for TechTape ---------- */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+
+.hover-pause:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none !important;
+    overflow-x: auto;
+    white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+}
+

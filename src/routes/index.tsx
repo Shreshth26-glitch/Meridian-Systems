@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/ui/reveal";
 
 import { Hero } from "@/components/site/hero";
+import { TechTape } from "@/components/site/tech-tape";
 import { SignatureSolutions } from "@/components/site/signature-solutions";
 import { CardArt } from "@/components/site/card-art";
 import { caseStudies } from "@/lib/services";
@@ -269,6 +270,7 @@ function Index() {
   return (
     <>
       <Hero />
+      <TechTape />
       <SignatureSolutions />
 
       {/* Process Section (Roadmap) */}
