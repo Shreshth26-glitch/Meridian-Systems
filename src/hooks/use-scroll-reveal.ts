@@ -12,7 +12,6 @@ export function useScrollReveal() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            // Optional: stop observing once revealed
             observer.unobserve(entry.target);
           }
         });
@@ -23,19 +22,37 @@ export function useScrollReveal() {
       },
     );
 
-    // Find and observe all scroll-reveal elements
-    const elements = document.querySelectorAll(".scroll-reveal");
-    elements.forEach((el) => observer.observe(el));
+    // Track which elements we are currently observing to avoid duplicate work
+    const observedElements = new Set<Element>();
 
-    return () => {
+    const observeNewElements = () => {
+      const elements = document.querySelectorAll(".scroll-reveal:not(.visible)");
       elements.forEach((el) => {
-        try {
-          observer.unobserve(el);
-        } catch {
-          // ignore if element is already unmounted
+        if (!observedElements.has(el)) {
+          observer.observe(el);
+          observedElements.add(el);
         }
       });
+    };
+
+    // Run initial scan
+    observeNewElements();
+
+    // Setup MutationObserver to watch for asynchronously mounted elements
+    const mutationObserver = new MutationObserver(() => {
+      observeNewElements();
+    });
+
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
       observer.disconnect();
+      mutationObserver.disconnect();
+      observedElements.clear();
     };
   }, [location.pathname]); // re-run setup whenever pathname changes
 }
+
